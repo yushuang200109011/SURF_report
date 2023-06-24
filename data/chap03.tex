@@ -1,97 +1,178 @@
 % !TeX root = ../thuthesis-example.tex
 
-\chapter{数学符号和公式}
+\chapter{自主导航算法设计}
 
-\section{数学符号}
+正如\ref{target}节所讲，本章要介绍的是一种基于强化学习的端到端自主导航算法。本章将首先介绍强化学习的基本概念以及本算法使用的骨干（Backbone）算法：近端梯度下降法（Prximal policy optimization, PPO），然后介绍自主导航算法的整体框架和神经网络结构设计，最后介绍本研究提出的三段式训练方法以及其它提升训练效果的手段。
 
-中文论文的数学符号默认遵循 GB/T 3102.11—1993《物理科学和技术中使用的数学符号》
-\footnote{原 GB 3102.11—1993，自 2017 年 3 月 23 日起，该标准转为推荐性标准。}。
-该标准参照采纳 ISO 31-11:1992 \footnote{目前已更新为 ISO 80000-2:2019。}，
-但是与 \TeX{} 默认的美国数学学会（AMS）的符号习惯有所区别。
-具体地来说主要有以下差异：
+\section{强化学习基本介绍}
+强化学习是一类通过智能体与环境不断交互逐渐改进策略的机器学习方法。和有监督学习（Supervised Learning）不同，强化学习无需标签。本节将具体地介绍强化学习的基本概念、核心算法和本研究所使用的骨干算法：近端梯度下降法。
+
+\subsection{强化学习基础}
+强化学习中，智能体（Agent）是指执行学习和决策的实体，可以是一个机器人、自动驾驶车辆或其他能够感知环境、做出决策并执行动作的实体。环境（Environment）是智能体与之进行交互的外部实体，可以是真实的物理环境，也可以是仿真环境。
+智能体在环境中有自身状态（State），并在观测到状态后选择一个动作（Action）。环境接受智能体的动作并执行、执行后为智能体生成奖励（Reward）。强化学习与环境交互的过程如图\ref{fig_RL}所示。
+
+为方便阐述强化学习算法的设计，引入一些符号和标记。
 \begin{enumerate}
-  \item 大写希腊字母默认为斜体，如
-    \begin{equation*}
-      \Gamma \Delta \Theta \Lambda \Xi \Pi \Sigma \Upsilon \Phi \Psi \Omega.
-    \end{equation*}
-    注意有限增量符号 $\increment$ 固定使用正体，模板提供了 \cs{increment} 命令。
-  \item 小于等于号和大于等于号使用倾斜的字形 $\le$、$\ge$。
-  \item 积分号使用正体，比如 $\int$、$\oint$。
-  \item
-    偏微分符号 $\partial$ 使用正体。
-  \item
-    省略号 \cs{dots} 按照中文的习惯固定居中，比如
-    \begin{equation*}
-      1, 2, \dots, n \quad 1 + 2 + \dots + n.
-    \end{equation*}
-  \item
-    实部 $\Re$ 和虚部 $\Im$ 的字体使用罗马体。
+  \item 强化学习将任务描述为一个离散的事件序列，每个事件称为一个时间步（Step），记为$t$。
+  \item 在$t$时刻智能体观测到的状态记作$S_t$
+  \item 智能体通过状态选择动作的方法称为策略，被记作$\pi(a|s)$描述在状态$s$下选择动作$a$的概率。
+  \item $t$时刻根据智能体状态和动作由环境给出的及时反馈，记作$R_t$，是一个标量。通常由实验者手动设计。
+\end{enumerate}
+按照流程，若将初始值以角标$0$记录，不断交互就可以得到一条交互轨迹$\tau$：
+\[
+  S_0,\ R_0,\ A_0,\ S_1,\ R_1,\ A_1,\ S_2,\ R_2,\ A_2,\ \dots
+\]
+强化学习所研究的问题必须是马尔可夫决策（Markov Decision Process, MDP）问题，即下一时刻的状态仅仅与上一时刻的状态和动作有关，与之前的状态和动作无关。可以使用五元组$(\mathcal{S,A,P,R,}\gamma)$来描述MDP问题：
+\begin{enumerate}
+  \item $\mathcal{S}$为状态空间，表示所有可能出现的状态的集合。
+  \item $\mathcal{A}$为动作空间，表示所有可能出现的动作的集合。
+  \item $\mathcal{P}$为环境状态转移概率，表示给定某一时刻$(s,a)$下一时刻状态转移为$s'$的概率，即$\mathcal{P}(s'|s,a)$。
+  \item $\mathcal{R}$为奖励函数，是$(s,a)$的函数。
+  \item $\gamma$是折扣因子，$0\leq\gamma\leq 1$，表示智能体对未来奖励的重视程度。
 \end{enumerate}
 
-以上数学符号样式的差异可以在模板中统一设置。
-另外国标还有一些与 AMS 不同的符号使用习惯，需要用户在写作时进行处理：
-\begin{enumerate}
-  \item 数学常数和特殊函数名用正体，如
-    \begin{equation*}
-      \uppi = 3.14\dots; \quad
-      \symup{i}^2 = -1; \quad
-      \symup{e} = \lim_{n \to \infty} \left( 1 + \frac{1}{n} \right)^n.
-    \end{equation*}
-  \item 微分号使用正体，比如 $\dif y / \dif x$。
-  \item 向量、矩阵和张量用粗斜体（\cs{symbf}），如 $\symbf{x}$、$\symbf{\Sigma}$、$\symbfsf{T}$。
-  \item 自然对数用 $\ln x$ 不用 $\log x$。
-\end{enumerate}
+由此我们可以引出状态值函数（State value function）$V(s)$和动作值函数（Action value function）$Q(s,a)$的定义：
+\[\begin{aligned}
+  G_t &= \sum_{k=0}^{\infty} \gamma^k R_{t+k+1}\\
+  V(s) &= \mathbb{E}[G_t|S_t=s]\\
+  Q(s,a) &= \mathbb{E}[G_t|S_t=s,A_t=a]
+\end{aligned}\]
+MDP问题总存在最优策略$\pi^*$，满足
+\[
+  \pi^* = \arg\max {Q_\pi(s,a)}
+\]
+由于$\mathcal{P},\ \mathcal{R}$是智能体所未知的，因此强化学习的目的就是利用采集到的轨迹$\tau$更新策略$\pi$使得$\pi$尽可能接近$\pi^*$以获取最高的累计奖励$G_t$。其中通过估计值函数$V,\ Q$再通过值函数选择$a$的一类方法被称为基于值的方法（Value based） ，直接通过梯度更新策略$\pi$的一类方法被称为基于策略的方法（Policy Based）。
+
+\subsection{近端策略优化算法}
+近端策略优化算法（Prximal policy optimization, PPO）是一中Policy Based强化学习方法，并使用KL散度来控制策略的变化率使得策略始终保持在稳定的范围内。
+
+PPO 算法采取Actor-Critic的训练架构，分别学习学习策略$\pi_\theta(a|s)$和价值函数$V_\phi(s)$，其中$\theta,\ \phi$分别是$\pi,\ \phi$的神经网络参数。PPO 算法的核心是使用一种称为“截断优化”（Clipping）的技术来限制策略更新的范围，以避免过大的策略更新幅度导致训练不稳定。PPO 的优化目标为：
+\[
+  J^{\mathrm{CLIP}}(\theta)=\mathbb{E}_{t}\left[\min \left(\alpha_{t}(\theta) \hat{A}_{t}, \operatorname{clip}\left(\alpha_{t}(\theta), 1-\epsilon, 1+\epsilon\right) \hat{A}_{t}\right)\right]
+\]
+其中
+\[
+  \alpha_{t}(\theta)=\frac{\pi_{\theta}\left(a_{t} \mid s_{t}\right)}{\pi_{\theta_{\text {old }}}\left(a_{t} \mid s_{t}\right)}
+\]
+表示新、旧策略之间的变化情况，$\epsilon$表示置信区间，$\hat{A}_t = G_t-V_{\pi_\theta}(s_t)$是优势函数（Advantage function）.PPO 算法使用广义优势估计
+（Generalized Advantage Estimation，GAE）[79]方法来估计$\hat{A}_t$。具体而言，GAE估计的公式如下：
+\[
+  A_{t}^{G A E(\gamma, \lambda)}=\sum_{l=0}^{\infty}(\gamma \lambda)^{l} \delta_{t+l}
+\]
+其中，$\delta_{t+1}$表示从时刻$t$开始的累计奖励与价值函数的差异：
+\[
+  \delta_{t+l}=r_{t+l}+\gamma V\left(s_{t+l+1}\right)-V\left(s_{t+l}\right)
+\]
+其中$\lambda$是一个超参数，控制GAE估计的偏差和方差间的权衡。在实践中，$\lambda$通常被设置为一个较小的值，例如$0.95$。
+
+\section{端到端自主导航算法整体结构}
+本研究设计了一套适用于无人机自主导航任务的端到端算法框架结构，如图\ref{fig_framework}所示。下面将详细介绍各部分的功能。
+
+\subsection{输入和输出}
+正如\ref{related_works}节所讲，无人机自主飞行任务常被划分为感知、决策、控制三部分，但实践中这样的划分往往并不绝对。为加快计算速度，本框架采用端到端的方式，将决策和部分感知、控制算法融合。框架的输入包括由IMU测量的无人机速度、加速度、角速度、角加速度；由深度相机得到的深度图，分辨率为$320\times240$像素；以及由视觉里程计（Visual-inertial odometry， VIO）输出的飞行器位置与角位置。
+
+企图控制一台飞行器，算法的输出也是多样的，例如飞行器的线速度和角速度、飞行器的总推力（Collective thrust）和角速度、飞行器四个旋翼的推力或转速等。相关工作表明\cite{kaufmann2022benchmark}输出为总推力与角速度（Collective thrust and body rates, CTBR）的策略往往会产生更稳健的效果，在仿真器和现实世界中的动力学差异也更小。因此本框架的输出为CTBR命令。
+
+\subsection{编码器}
+
+\subsection{规划器}
 
 
-英文论文的数学符号使用 \TeX{} 默认的样式。
-如果有必要，也可以通过设置 \verb|math-style| 选择数学符号样式。
+经过实验与调研，该端到端框架相比传统感知-建图
 
-关于量和单位推荐使用
-\href{http://mirrors.ctan.org/macros/latex/contrib/siunitx/siunitx.pdf}{\pkg{siunitx}}
-宏包，
-可以方便地处理希腊字母以及数字与单位之间的空白，
-比如：
-\SI{6.4e6}{m}，
-\SI{9}{\micro\meter}，
-\si{kg.m.s^{-1}}，
-\SIrange{10}{20}{\degreeCelsius}。
+\section{训练方法}
+\subsection{三段式训练方法}
+\subsection{奖励设计}
+% \section{数学符号}
+
+% 中文论文的数学符号默认遵循 GB/T 3102.11—1993《物理科学和技术中使用的数学符号》
+% \footnote{原 GB 3102.11—1993，自 2017 年 3 月 23 日起，该标准转为推荐性标准。}。
+% 该标准参照采纳 ISO 31-11:1992 \footnote{目前已更新为 ISO 80000-2:2019。}，
+% 但是与 \TeX{} 默认的美国数学学会（AMS）的符号习惯有所区别。
+% 具体地来说主要有以下差异：
+% \begin{enumerate}
+%   \item 大写希腊字母默认为斜体，如
+%     \begin{equation*}
+%       \Gamma \Delta \Theta \Lambda \Xi \Pi \Sigma \Upsilon \Phi \Psi \Omega.
+%     \end{equation*}
+%     注意有限增量符号 $\increment$ 固定使用正体，模板提供了 \cs{increment} 命令。
+%   \item 小于等于号和大于等于号使用倾斜的字形 $\le$、$\ge$。
+%   \item 积分号使用正体，比如 $\int$、$\oint$。
+%   \item
+%     偏微分符号 $\partial$ 使用正体。
+%   \item
+%     省略号 \cs{dots} 按照中文的习惯固定居中，比如
+%     \begin{equation*}
+%       1, 2, \dots, n \quad 1 + 2 + \dots + n.
+%     \end{equation*}
+%   \item
+%     实部 $\Re$ 和虚部 $\Im$ 的字体使用罗马体。
+% \end{enumerate}
+
+% 以上数学符号样式的差异可以在模板中统一设置。
+% 另外国标还有一些与 AMS 不同的符号使用习惯，需要用户在写作时进行处理：
+% \begin{enumerate}
+%   \item 数学常数和特殊函数名用正体，如
+%     \begin{equation*}
+%       \uppi = 3.14\dots; \quad
+%       \symup{i}^2 = -1; \quad
+%       \symup{e} = \lim_{n \to \infty} \left( 1 + \frac{1}{n} \right)^n.
+%     \end{equation*}
+%   \item 微分号使用正体，比如 $\dif y / \dif x$。
+%   \item 向量、矩阵和张量用粗斜体（\cs{symbf}），如 $\symbf{x}$、$\symbf{\Sigma}$、$\symbfsf{T}$。
+%   \item 自然对数用 $\ln x$ 不用 $\log x$。
+% \end{enumerate}
+
+
+% 英文论文的数学符号使用 \TeX{} 默认的样式。
+% 如果有必要，也可以通过设置 \verb|math-style| 选择数学符号样式。
+
+% 关于量和单位推荐使用
+% \href{http://mirrors.ctan.org/macros/latex/contrib/siunitx/siunitx.pdf}{\pkg{siunitx}}
+% 宏包，
+% 可以方便地处理希腊字母以及数字与单位之间的空白，
+% 比如：
+% \SI{6.4e6}{m}，
+% \SI{9}{\micro\meter}，
+% \si{kg.m.s^{-1}}，
+% \SIrange{10}{20}{\degreeCelsius}。
 
 
 
-\section{数学公式}
+% \section{数学公式}
 
-数学公式可以使用 \env{equation} 和 \env{equation*} 环境。
-注意数学公式的引用应前后带括号，通常使用 \cs{eqref} 命令，比如式\eqref{eq:example}。
-\begin{equation}
-  \frac{1}{2 \uppi \symup{i}} \int_\gamma f = \sum_{k=1}^m n(\gamma; a_k) \mathscr{R}(f; a_k).
-  \label{eq:example}
-\end{equation}
+% 数学公式可以使用 \env{equation} 和 \env{equation*} 环境。
+% 注意数学公式的引用应前后带括号，通常使用 \cs{eqref} 命令，比如式\eqref{eq:example}。
+% \begin{equation}
+%   \frac{1}{2 \uppi \symup{i}} \int_\gamma f = \sum_{k=1}^m n(\gamma; a_k) \mathscr{R}(f; a_k).
+%   \label{eq:example}
+% \end{equation}
 
-多行公式尽可能在“=”处对齐，推荐使用 \env{align} 环境。
-\begin{align}
-  a & = b + c + d + e \\
-    & = f + g
-\end{align}
+% 多行公式尽可能在“=”处对齐，推荐使用 \env{align} 环境。
+% \begin{align}
+%   a & = b + c + d + e \\
+%     & = f + g
+% \end{align}
 
 
 
-\section{数学定理}
+% \section{数学定理}
 
-定理环境的格式可以使用 \pkg{amsthm} 或者 \pkg{ntheorem} 宏包配置。
-用户在导言区载入这两者之一后，模板会自动配置 \env{thoerem}、\env{proof} 等环境。
+% 定理环境的格式可以使用 \pkg{amsthm} 或者 \pkg{ntheorem} 宏包配置。
+% 用户在导言区载入这两者之一后，模板会自动配置 \env{thoerem}、\env{proof} 等环境。
 
-\begin{theorem}[Lindeberg--Lévy 中心极限定理]
-  设随机变量 $X_1, X_2, \dots, X_n$ 独立同分布， 且具有期望 $\mu$ 和有限的方差 $\sigma^2 \ne 0$，
-  记 $\bar{X}_n = \frac{1}{n} \sum_{i+1}^n X_i$，则
-  \begin{equation}
-    \lim_{n \to \infty} P \left(\frac{\sqrt{n} \left( \bar{X}_n - \mu \right)}{\sigma} \le z \right) = \Phi(z),
-  \end{equation}
-  其中 $\Phi(z)$ 是标准正态分布的分布函数。
-\end{theorem}
-\begin{proof}
-  Trivial.
-\end{proof}
+% \begin{theorem}[Lindeberg--Lévy 中心极限定理]
+%   设随机变量 $X_1, X_2, \dots, X_n$ 独立同分布， 且具有期望 $\mu$ 和有限的方差 $\sigma^2 \ne 0$，
+%   记 $\bar{X}_n = \frac{1}{n} \sum_{i+1}^n X_i$，则
+%   \begin{equation}
+%     \lim_{n \to \infty} P \left(\frac{\sqrt{n} \left( \bar{X}_n - \mu \right)}{\sigma} \le z \right) = \Phi(z),
+%   \end{equation}
+%   其中 $\Phi(z)$ 是标准正态分布的分布函数。
+% \end{theorem}
+% \begin{proof}
+%   Trivial.
+% \end{proof}
 
-同时模板还提供了 \env{assumption}、\env{definition}、\env{proposition}、
-\env{lemma}、\env{theorem}、\env{axiom}、\env{corollary}、\env{exercise}、
-\env{example}、\env{remar}、\env{problem}、\env{conjecture} 这些相关的环境。
+% 同时模板还提供了 \env{assumption}、\env{definition}、\env{proposition}、
+% \env{lemma}、\env{theorem}、\env{axiom}、\env{corollary}、\env{exercise}、
+% \env{example}、\env{remar}、\env{problem}、\env{conjecture} 这些相关的环境。
