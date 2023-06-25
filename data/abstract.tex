@@ -3,7 +3,12 @@
 % 中英文摘要和关键字
 
 \begin{abstract}
-  四旋翼飞行器具有敏捷的动力学特性，可以在复杂的环境中高速飞行，具有广泛的研究价值和应用价值。但由于其动力学的非线性和未知环境的复杂性，其自主导航是一项具有挑战性的任务，迄今为止只有训练有素的人类飞行员才能发挥其极限性能。本研究提出了一种基于强化学习端到端的方法，使四旋翼飞行器仅用机载传感和计算设备便能自主通过未知的环境。为解决观测空间大、无人机动力学非线性和环境复杂带来的探索空间大，算法难以收敛等问题，本研究提出了先使用特权信息预训练再
+
+  四旋翼飞行器具有敏捷的动力学特性，可以在复杂的环境中高速飞行，在搜索救援、物流、农业和军事等领域都取得了广泛的应用，具有较高的研究价值和应用价值。但由于其动力学的非线性和未知环境的复杂性，其自主飞行仍是一项具有挑战性的任务。迄今为止只有训练有素的人类飞行员才能发挥其极限性能，现有的部分研究仅将其视作普通的载荷平台而无法发挥其敏捷飞行的完整能力。
+
+  现有的无人机自主飞行方法主要有两类。以优化为基础的方法具有可解释性强、飞行稳定、规划可靠性好额优点，但是也面临着机载计算资源受限条件下建图、规划速度慢的问题。而另一类以深度学习为基础的算法企图建立端到端的规划控制器，虽然解决了计算速度慢的问题但依然存在依赖大量手动采集的专家数据和标记d额问题，且部分方法泛化性不足，难以适应不同速度、场景下的自主导航任务。
+  
+  本研究面向四旋翼飞行器自主导航任务，提出了一种基于强化学习的自主导航算法框架并提出了一种三段式训练方法，该方法使得算法收敛所需要的时间提升了一个数量级。本研究还针对算法需求改进了现有仿真器，使其在不牺牲拟真度的同时把仿真速度提升2$\sim$6倍。最后本研究还开发了具有通用接口和稳定飞行性能的实机部署平台，整个仿真-算法-部署系统具有快速的迭代能力和良好的部署能力。
 
   % 关键词用“英文逗号”分隔，输出时会自动处理为正确的分隔符
   \thusetup{
@@ -12,16 +17,12 @@
 \end{abstract}
 
 \begin{abstract*}
-  An abstract of a dissertation is a summary and extraction of research work and contributions.
-  Included in an abstract should be description of research topic and research objective, brief introduction to methodology and research process, and summary of conclusion and contributions of the research.
-  An abstract should be characterized by independence and clarity and carry identical information with the dissertation.
-  It should be such that the general idea and major contributions of the dissertation are conveyed without reading the dissertation.
 
-  An abstract should be concise and to the point.
-  It is a misunderstanding to make an abstract an outline of the dissertation and words “the first chapter”, “the second chapter” and the like should be avoided in the abstract.
+  Quadrotor aircraft has agile dynamic characteristics and can fly at high speed in complex environments. It has been widely used in search and rescue, logistics, agriculture and military fields, and has high research value and application value. However, its autonomous flight is still a challenging task due to the nonlinearity of its dynamics and the complexity of the unknown environment. So far, only well-trained human pilots can exert its extreme performance, and some existing research only regards it as an ordinary load platform and cannot exert its full ability of agile flight.
 
-  Keywords are terms used in a dissertation for indexing, reflecting core information of the dissertation.
-  An abstract may contain a maximum of 5 keywords, with semi-colons used in between to separate one another.
+  There are two main categories of existing autonomous flight methods for UAVs. The optimization-based method has the advantages of strong interpretability, stable flight, and good planning reliability, but it also faces the problem of slow construction and planning under the condition of limited onboard computing resources. Another type of algorithm based on deep learning attempts to establish an end-to-end planning controller. Although it solves the problem of slow calculation speed, it still has the problem of relying on a large amount of manually collected expert data and labeling, and some methods are generalizable. Insufficient, it is difficult to adapt to autonomous navigation tasks under different speeds and scenarios.
+
+  This research is aimed at the autonomous navigation task of quadrotor aircraft, and proposes an autonomous navigation algorithm framework based on reinforcement learning and a three-stage training method, which increases the time required for algorithm convergence by an order of magnitude. This study also improves the existing simulator according to the algorithm requirements, so that it can increase the simulation speed by 2$\sim$6 times without sacrificing the fidelity. Finally, this study also developed a real-aircraft deployment platform with a common interface and stable flight performance. The entire simulation-algorithm-deployment system has fast iterative capabilities and good deployment capabilities.
 
   % Use comma as separator when inputting
   \thusetup{
