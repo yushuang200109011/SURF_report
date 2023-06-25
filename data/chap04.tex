@@ -9,17 +9,23 @@
 % 详细的硬件平台选型及各部件基本参数如附录\ref{}所示。
 
 \section{部署系统}
-本研究基于ROS开发了一套运行于机载计算机上的部署系统。部署系统的主要功能是收集传感器的输入、提供算法接口、为飞行器保证基本的飞行能力、以及与底层执行器（在本研究中是飞行控制器）通信。本研究开发的部署系统结构如图\ref{}所示，每个方框表示一个ROS节点。
+本研究基于ROS开发了一套运行于机载计算机上的部署系统。部署系统的主要功能是收集传感器的输入、提供算法接口、为飞行器保证基本的飞行能力、以及与底层执行器（在本研究中是飞行控制器）通信。本研究开发的部署系统结构如图\ref{fig_deploy_framework}所示，每个框代表一个ROS节点。其中的AutoPilot节点是部署框架的核心节点。
+\begin{figure}
+    \centering
+    \includegraphics[width = 1\textwidth]{deploy_framework.png}
+    \caption{部署系统结构图}
+    \label{fig_deploy_framework}
+\end{figure}
 
 \subsection{系统输入}
 系统的输入与表\ref{tab_input}所示一致。其中VIO的算法被嵌入式地集成到定位相机模块中，定位相机会直接输出飞行器的位置、姿态和速度信息。深度图的信息直接来源于深度相机模块。
 
-为增强定位系统的稳定性，本研究同样使用飞行控制器携带的IMU读取位姿信息。部署系统与飞行控制器通过Mavros桥（\ref{mavros_bridge}节）通信，读取IMU信息并使用增强卡尔曼滤波\cite{kalman1960contributions}\cite{kalman1960new}\cite{kalman1961new}（extended Kalman filter, EKF）融合定位相机与IMU的信息，得到更可靠的飞行器位姿信息。
+为增强定位系统的稳定性，本研究同样使用飞行控制器携带的IMU读取位姿信息。部署系统与飞行控制器通过Mavros桥通信\cite{mavros2023}，读取IMU信息并使用增强卡尔曼滤波\cite{kalman1960contributions}\cite{kalman1960new}\cite{kalman1961new}（extended Kalman filter, EKF）融合定位相机与IMU的信息，得到更可靠的飞行器位姿信息。
 
 \subsection{算法接口}
-本部署框架于AUtopilot节点内集成了模型预测控制器\cite{Falanga2018}（Model predict control, MPC）和比例-积分-微分控制器（Proportion-integration-differentiation, PID）控制器。通过封装，两个控制器均可以接受五种不同的命令输入，并将他们转换为统一的输出。输出有两种模式可供选择。输入和输出命令的具体介绍如表\ref{tab_autopilot_input}和表\ref{tab_autopilot_output}所示。
+本部署框架于Autopilot节点内集成了模型预测控制器\cite{Falanga2018}（Model predict control, MPC）和比例-积分-微分控制器（Proportion-integration-differentiation, PID）控制器。通过封装，两个控制器均可以接受五种不同的命令输入，并将他们转换为统一的输出。输出有两种模式可供选择。输入和输出命令的具体介绍如表\ref{tab_autopilot_input}和表\ref{tab_autopilot_output}所示。
 
-\begin{table}[!ht]
+\begin{table}
     \centering
     \begin{tabular}{ccl}
     \hline
@@ -36,7 +42,7 @@
     \label{tab_autopilot_input}
 \end{table}
 
-\begin{table}[!ht]
+\begin{table}
     \centering
     \begin{tabular}{ccl}
     \hline
@@ -49,9 +55,40 @@
 \end{table}
 
 \subsection{状态切换}
-\subsection{Mavros桥}
-\label{mavros_bridge}
+
+AutoPilot节点同时负责无人机的飞行状态切换，其运行的是一个有限状态机（Finite State Machine, FSM）。FSM的状态转移图如图\ref{fig_fsm}所示。从图中可以看出该节点负责任务外的飞行模式，例如自动起降、自动悬停等。AutoPilot节点还为飞行系统带来了强大的鲁棒性，若飞行过程中感知或规划出现问题时，有限状态机会自动切换到悬停模式，保证飞行器的安全。该节点设置看门狗（WatchDog）线程，飞行过程中控制器出现问题时，节点会自动发出告警并切换至手动飞行模式。此外该节点还负责读取飞行控制器的反馈，例如电机温度、电池电压、电流等参数，根据参数随时改变规划器和控制器的参数，实现更高精度的飞行。
+
+\begin{figure}
+    \centering
+    \includegraphics[width = 0.7\textwidth]{fsm.png}
+    \caption{状态转移图}
+    \label{fig_fsm}
+\end{figure}
+
 \subsection{部署系统的基本性能}
+部署系统的性能受硬件选型、驱动、软件设计等多方面因素制约。经测试将本部署平台的基础性能制成表\ref{tab_deploy}。
+
+\begin{table}
+    \centering
+    \begin{tabular}{ccc}
+    \hline
+         名称 & 指标 & 备注 \\ \hline
+        深度图尺寸 & ~ & ~ \\ 
+        深度图精度 & ~ & ~ \\ 
+        深度图频率 & ~ & ~ \\ 
+        视觉里程计频率 & ~ & ~ \\ 
+        视觉里程计精度 & ~ & ~ \\ 
+        控制器频率 & ~ & ~ \\ 
+        修正参数频率 & ~ & ~ \\ 
+        最大飞行速度 & ~ & ~ \\ 
+        最大飞行加速度 & ~ & ~ \\ 
+         轨迹跟踪精度 & ~ & ~ \\ \hline
+    \end{tabular}
+\end{table}
+
+\subsection{本章小结}
+
+本章介绍了
 
 %此处应包含部署系统的基础能力测试
 

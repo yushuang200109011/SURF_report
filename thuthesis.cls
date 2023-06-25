@@ -3262,9 +3262,8 @@
   labelsep*=0.5cm,
   itemindent=0pt,
 }
-\newcommand{\thu@statement@text}{本人郑重声明：所呈交的学位论文，是本人在导师指导下
-  ，独立进行研究工作所取得的成果。尽我所知，除文中已经注明引用的内容外，本学位论
-  文的研究成果不包含任何他人享有著作权的内容。对本论文所涉及的研究工作做出贡献的
+\newcommand{\thu@statement@text}{本人郑重声明：所呈交的结题报告，是本人在导师指导下
+  ，独立进行研究工作所取得的成果。尽我所知，除文中已经注明引用的内容外，本结题报告的研究成果不包含任何他人享有著作权的内容。对本报告所涉及的研究工作做出贡献的
   其他个人和集体，均已在文中以明确方式标明。}
 \newcommand{\thu@signature}{签\hspace{1em}名：}
 \newcommand{\thu@backdate}{日\hspace{1em}期：}

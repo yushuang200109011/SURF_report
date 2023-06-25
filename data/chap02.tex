@@ -8,7 +8,7 @@ FLightmare仿真器\cite{flightmare}是苏黎世联邦理工大学开发的一�
 \begin{figure}
   \centering
   \includegraphics[width = 0.75\textwidth]{simulator_origin.png}
-  \caption{FLightmare仿真器结构示意图}
+  \caption{FLightmare仿真器结构图}
   \label{fig_simulator_origin}
 \end{figure}
 
@@ -17,8 +17,8 @@ Gazebo是加州大学提出的机器人仿真平台（平台界面如图\ref{fig
 \begin{figure}
   \centering
   \includegraphics[width = 0.7\textwidth]{gazebo.png}
-  \label{fig_gazebo}
   \caption{Gazebo物理引擎界面示意图}
+  \label{fig_gazebo}
 \end{figure}
 Gazebo对于ROS生态支持效果较好。因此多出现在使用ROS的仿真平台中。
 
@@ -55,11 +55,13 @@ Unity是一款跨平台的二维和三维游戏引擎\cite{unity}，拥有强大
 \begin{figure}
   \centering
   \includegraphics[width = 1\textwidth]{simulator_multi.png}
-  \caption{改进后仿真器结构示意图}
+  \caption{改进后仿真器结构图}
   \label{fig_simulator_multi}
 \end{figure}
 
 \section{本章小结}
+
+本章介绍了本研究所使用基础仿真器的基本情况。并介绍了对基础仿真器进行改动的设计。经过并行化设计仿真器的仿真速度得到了大幅提升，为后续算法研究和训练提供了保障。经过测试，改进后仿真器收集算法收敛所需的数据花费的时间约为48$\sim$72小时。
 
 
 % \section{插图}
