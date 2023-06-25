@@ -1,6 +1,59 @@
 % !TeX root = ../thuthesis-example.tex
 
 \chapter{部署平台设计}
+一个完备的飞行部署平台应具备性能稳定、接口完善、易用性高等优点。目前市面上尚没有一种满足本研究算法部署需求的平台。本研究从硬件选型、装配再到部署系统的开发，设计了整个部署平台。本部署平台的开发参考了相关工作的开源硬件平台\cite{zhou2020ego}和控制系统\cite{Faessler18ral}。
+
+\section{硬件平台搭建}
+
+截止本报告撰写，为本研究设计的自主无人机已经迭代三个版本。如图\ref{}所示。这三个版本无人机的功能改进如表\ref{}所示。最新版本自主无人机的基本参数如表\ref{}所示。
+% 详细的硬件平台选型及各部件基本参数如附录\ref{}所示。
+
+\section{部署系统}
+本研究基于ROS开发了一套运行于机载计算机上的部署系统。部署系统的主要功能是收集传感器的输入、提供算法接口、为飞行器保证基本的飞行能力、以及与底层执行器（在本研究中是飞行控制器）通信。本研究开发的部署系统结构如图\ref{}所示，每个方框表示一个ROS节点。
+
+\subsection{系统输入}
+系统的输入与表\ref{tab_input}所示一致。其中VIO的算法被嵌入式地集成到定位相机模块中，定位相机会直接输出飞行器的位置、姿态和速度信息。深度图的信息直接来源于深度相机模块。
+
+为增强定位系统的稳定性，本研究同样使用飞行控制器携带的IMU读取位姿信息。部署系统与飞行控制器通过Mavros桥（\ref{mavros_bridge}节）通信，读取IMU信息并使用增强卡尔曼滤波\cite{kalman1960contributions}\cite{kalman1960new}\cite{kalman1961new}（extended Kalman filter, EKF）融合定位相机与IMU的信息，得到更可靠的飞行器位姿信息。
+
+\subsection{算法接口}
+本部署框架于AUtopilot节点内集成了模型预测控制器\cite{Falanga2018}（Model predict control, MPC）和比例-积分-微分控制器（Proportion-integration-differentiation, PID）控制器。通过封装，两个控制器均可以接受五种不同的命令输入，并将他们转换为统一的输出。输出有两种模式可供选择。输入和输出命令的具体介绍如表\ref{tab_autopilot_input}和表\ref{tab_autopilot_output}所示。
+
+\begin{table}[!ht]
+    \centering
+    \begin{tabular}{ccl}
+    \hline
+        \textbf{输入名称} & \textbf{输入内容} & \textbf{输入描述} \\ \hline
+        pos\_command & $(x,\ y,\ z)$ & 指定空间中一点，按照直线飞行至该位置。 \\ 
+        velo\_command & $(v_x,\ v_y,\ v_z,\ \omega_{z})$ & 指定线速度和$z$向角速度，按照该速度飞行。 \\ 
+        \multirow{3}*{ref\_command} & 一个轨迹点（Trajectory Point）： & 指定轨迹点，使飞行器的状态与轨迹点尽 \\ 
+        & $(x,\ y,\ z,\ \text{roll, pitch, yaw})$ & 可能接近。通常轨迹点与当前状态差别不 \\
+        & 及其$1\sim3$阶时间导数 & 大，连续发送轨迹点以实现光滑控制。 \\
+        traj\_command & 一串轨迹点 & 从初始位置连续飞行全部轨迹点 \\ 
+        control\_command & 控制器输出的指令格式 & 控制器不工作 \\ \hline
+    \end{tabular}
+    \caption{集成控制器可选输入}
+    \label{tab_autopilot_input}
+\end{table}
+
+\begin{table}[!ht]
+    \centering
+    \begin{tabular}{ccl}
+    \hline
+        \textbf{输出模式} & \textbf{输出内容} & \textbf{输入描述} \\ \hline
+        attitude & $(\text{thrust},\ \text{roll, pitch, yaw})$ & 飞行器的总推力和目标姿态 \\ 
+        bodyrates & $(\text{thrust},\ \omega_x,\ \omega_y,\ \omega_z)$ & 即CTBR命令 \\ \hline
+    \end{tabular}
+    \caption{集成控制器可选输出}
+    \label{tab_autopilot_output}
+\end{table}
+
+\subsection{状态切换}
+\subsection{Mavros桥}
+\label{mavros_bridge}
+\subsection{部署系统的基本性能}
+
+%此处应包含部署系统的基础能力测试
 
 % 模板支持 BibTeX 和 BibLaTeX 两种方式处理参考文献。
 % 下文主要介绍 BibTeX 配合 \pkg{natbib} 宏包的主要使用方法。

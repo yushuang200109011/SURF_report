@@ -4,13 +4,19 @@
 本章主要介绍高并行度仿真器的设计和开发。本研究以苏黎世联邦理工大学开发的FLightmare仿真器为基础，增加了并行设计以加快仿真速度。由于该仿真器使用Gazebo作为物理引擎，Unity作为渲染引擎，因此该仿真器仿真度较高。本章将介绍Flightmare仿真器的基本情况和本研究所做的改进。
 
 \section{仿真器基本情况}
-FLightmare仿真器\cite{flightmare}是苏黎世联邦理工大学开发的一款四旋翼飞行器仿真平台。使用Gazebo作为物理引擎并使用Unity作为渲染引擎，两个模块可分开运行。仿真器的原始结构如图\ref{}所示。
+FLightmare仿真器\cite{flightmare}是苏黎世联邦理工大学开发的一款四旋翼飞行器仿真平台。使用Gazebo作为物理引擎并使用Unity作为渲染引擎，两个模块可分开运行。仿真器的原始结构如图\ref{fig_simulator_origin}所示。
+\begin{figure}
+  \centering
+  \includegraphics[width = 0.75\textwidth]{simulator_origin.png}
+  \caption{FLightmare仿真器结构示意图}
+  \label{fig_simulator_origin}
+\end{figure}
 
 \subsection{Gazebo简介}
 Gazebo是加州大学提出的机器人仿真平台（平台界面如图\ref{fig_gazebo}所示），可实现对于复杂的室内外环境精确的模拟一个或多个机器人的运动。Gazebo的多体动力学模拟精确，但图形渲染能力羸弱，只能够使用CPU资源仿真简单的传感器模块，随着场景变得复杂，仿真运行速度会急剧降低。
 \begin{figure}
   \centering
-  \includegraphics[width = 0.8\textwidth]{gazebo.png}
+  \includegraphics[width = 0.7\textwidth]{gazebo.png}
   \label{fig_gazebo}
   \caption{Gazebo物理引擎界面示意图}
 \end{figure}
@@ -21,8 +27,8 @@ Unity是一款跨平台的二维和三维游戏引擎\cite{unity}，拥有强大
 \begin{figure}
   \centering
   \includegraphics[width = 0.9\textwidth]{pointcloud.png}
-  \label{fig_pointcloud}
   \caption{Unity渲染点云效果示意图}
+  \label{fig_pointcloud}
 \end{figure}
 \begin{figure}
   \centering  
@@ -43,9 +49,17 @@ Unity是一款跨平台的二维和三维游戏引擎\cite{unity}，拥有强大
   \item 并行控制器节点为每台飞机提供独立控制
 \end{enumerate}
 
-除此之外，受限于单台计算机计算资源有限，利用ROS的分布式特性还可以在局域网内搭建分布式仿真器结构，进一步加快仿真速度。改造完成的仿真器结构如图\ref{fig_simulator}所示。
+除此之外，受限于单台计算机计算资源有限，利用ROS的分布式特性还可以在局域网内搭建分布式仿真器结构，进一步加快仿真速度。改造完成的仿真器结构如图\ref{fig_simulator_multi}所示。
 
 在Intel i9 + Nvidia RTX 4090配置的测试平台上实验，改进后的仿真器在每台机器上最多并行2台无人机，通过局域网至多连接3台机器，实现2*3倍并行，训练强化学习算法的速度可提升6倍。
+\begin{figure}
+  \centering
+  \includegraphics[width = 1\textwidth]{simulator_multi.png}
+  \caption{改进后仿真器结构示意图}
+  \label{fig_simulator_multi}
+\end{figure}
+
+\section{本章小结}
 
 
 % \section{插图}
