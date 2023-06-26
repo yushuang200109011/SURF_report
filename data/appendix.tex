@@ -1,59 +1,48 @@
 % !TeX root = ../thuthesis-example.tex
 
-\chapter{补充内容}
+\chapter{无人机硬件平台设计}
 
-附录是与论文内容密切相关、但编入正文又影响整篇论文编排的条理和逻辑性的资料，例如某些重要的数据表格、计算程序、统计表等，是论文主体的补充内容，可根据需要设置。
+本节主要介绍本研究使用的无人机具体硬件设计、选型以及三代无人机性能指标上的改进。
 
-附录中的图、表、数学表达式、参考文献等另行编序号，与正文分开，一律用阿拉伯数字编码，
-但在数码前冠以附录的序号，例如“图~\ref{fig:appendix-figure}”，
-“表~\ref{tab:appendix-table}”，“式\eqref{eq:appendix-equation}”等。
+前两代无人机的设计主要参考了常见的250轴距穿越机设计\cite{zhou2020ego}，第三代无人机由于对通信、计算需求增加，对载荷的要求也更高，因此第三代无人机由河北福莱卡航空设计了其机械结构。在此也向河北福莱卡航空表示感谢。以最新的第三代无人机为例，该无人机的硬件选型如表\ref{tab_hardware}所示。三代无人机性能比较如表\ref{tab_hardware_cmp}所示（仅列举了有变化的性能参数）。
 
-
-\section{插图}
-
-% 附录中的插图示例（图~\ref{fig:appendix-figure}）。
-
-\begin{figure}
-  \centering
-  \includegraphics[width=0.6\linewidth]{example-image-a.pdf}
-  \caption{附录中的图片示例}
-  \label{fig:appendix-figure}
-\end{figure}
-
-
-\section{表格}
-
-% 附录中的表格示例（表~\ref{tab:appendix-table}）。
+第二代相较于第一代主要增加了定位相机模块和内嵌式的VIO算法，大大增强了无人机定位的可靠性。第三代相较于第二代更新了通信系统，增加了一块计算板卡，并为此增加了轴距，改变了整个动力系统的选型。
 
 \begin{table}
-  \centering
-  \caption{附录中的表格示例}
-  \begin{tabular}{ll}
-    \toprule
-    文件名          & 描述                         \\
-    \midrule
-    thuthesis.dtx   & 模板的源文件，包括文档和注释 \\
-    thuthesis.cls   & 模板文件                     \\
-    thuthesis-*.bst & BibTeX 参考文献表样式文件    \\
-    thuthesis-*.bbx & BibLaTeX 参考文献表样式文件  \\
-    thuthesis-*.cbx & BibLaTeX 引用样式文件        \\
-    \bottomrule
-  \end{tabular}
-  \label{tab:appendix-table}
+    \centering
+    \begin{tabular}{cc}
+    \hline
+        配件名称 & 配件型号 \\ \hline
+        机架 & 自主设计双层式碳纤维机架 \\ 
+        电机 & ~ \\ 
+        螺旋桨 & ~ \\ 
+        电子调速器 & ~ \\ 
+        飞行控制器 & CUAV V5+ \\ 
+        电池 & Tattu 6s 3700mAh \\ 
+        深度相机 & Intel Realsense d435i \\ 
+        定位相机 & Intel Realsense t265 \\ 
+        计算板卡 & Nvidia Xavier NX 两块 \\ 
+        机载网桥 & Vonets VM300-L \\ 
+        机载交换机 & Vonets VSP500 \\ \hline
+    \end{tabular}
+    \caption{第三代无人机硬件选型}
+    \label{tab_hardware}
 \end{table}
 
+\begin{table}[!ht]
+    \centering
+    \begin{tabular}{cccc}
+    \hline
+        参数名称 & 第一代 & 第二代 & 第三代 \\ \hline
+        起飞重量（kg） & 0.98 & 1.18 & ~ \\ 
+        总推力（N） & 51.23 & 51.23 & ~ \\ 
+        推重比 & 5.33 & 4.43 & ~ \\ 
+        定位精度（m） & 0.05 & 0.02 & 0.02 \\ 
+        GPU算力（TOPs） & 21 & 21 & 42 \\ 
+        通信范围（m） & \~8 & \~8 & \~15 \\ 
+        通信能力 & 集中式通信，依赖基站 & 集中式通信，依赖基站 & 分布式通信 \\ \hline
+    \end{tabular}
+    \caption{三代无人机性能比较}
+    \label{tab_hardware_cmp}
+\end{table}
 
-\section{数学表达式}
-
-% 附录中的数学表达式示例（式\eqref{eq:appendix-equation}）。
-\begin{equation}
-  \frac{1}{2 \uppi \symup{i}} \int_\gamma f = \sum_{k=1}^m n(\gamma; a_k) \mathscr{R}(f; a_k)
-  \label{eq:appendix-equation}
-\end{equation}
-
-
-\section{参考文献}
-
-附录中的参考文献示例（\cite{carlson1981two} 和 \cite{carlson1981two,taylor1983scanning,taylor1981study}）。
-
-%\printbibliography
