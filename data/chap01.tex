@@ -80,7 +80,15 @@
 
 \section{研究目的}
 \label{target}
-总结\ref{background}和\ref{related_works}节中提到的需求和研究现状，以四旋翼飞行器为代表的无人机完成自主导航任务存在以下三个挑战：
+本研究面向面向以四旋翼飞行器为代表的无人机的自主导航任务，设计一种高效的自主导航算法。自主导航任务的定义如图\ref{fig_task_define}所示。自主导航指的是一类在没有环境地图，没有外部定位、通信和操纵指令情况下自主通过未知区域并到达目标点的任务。
+\begin{figure}
+  \centering
+  \includegraphics[width = 0.97\textwidth]{task.png}
+  \caption{自主导航任务示意图}
+  \label{fig_task_define}
+\end{figure}
+
+总结\ref{background}和\ref{related_works}节中提到的需求和研究现状，以四旋翼无人机完成自主导航任务存在以下三个挑战：
 \begin{enumerate}
   \item 常用的无人机仿真器存在拟真度和仿真速度的矛盾。根据调研和实验，拟真度较高的仿真器虽然可以实现零成本部署，但采集数据速度慢，采集一条轨迹数据需要约90s时间\cite{loquercio2021learning}。而采集数据速度较快的仿真器往往难以直接部署\cite{zhu2022viola}。
   \item 现存的无人机自主导航算法难以满足需求。基于感知算法的使用优化方法的规划器规划速度慢，算力需求高\cite{ren2022bubble}。而基于人类专家数据的深度学习方法虽然很好的解决了规划速度的问题，但需要较大量的人类专家数据\cite{loquercio2021learning}，需要大量经验性的设定。

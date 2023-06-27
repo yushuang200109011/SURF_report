@@ -4,11 +4,11 @@
 
 \begin{abstract}
 
-  四旋翼飞行器具有敏捷的动力学特性，可以在复杂的环境中高速飞行，在搜索救援、物流、农业和军事等领域都取得了广泛的应用，具有较高的研究价值和应用价值。但由于其动力学的非线性和未知环境的复杂性，其自主飞行仍是一项具有挑战性的任务。迄今为止只有训练有素的人类飞行员才能发挥其极限性能，现有的部分研究仅将其视作普通的载荷平台而无法发挥其敏捷飞行的完整能力。
+  四旋翼飞行器具有敏捷的动力学特性，可以在复杂的环境中高速飞行，在搜索救援、物流、农业和军事等领域都取得了广泛的应用，具有较高的研究价值和应用价值。但由于其动力学的非线性和未知环境的复杂性，其自主飞行仍是一项具有挑战性的任务。迄今为止只有训练有素的人类飞行员才能发挥其极限性能，现有的部分研究仅将其视作普通的载荷平台而没能发挥其敏捷飞行的能力。
 
-  现有的无人机自主飞行方法主要有两类。以优化为基础的方法具有可解释性强、飞行稳定、规划可靠性好额优点，但是也面临着机载计算资源受限条件下建图、规划速度慢的问题。而另一类以深度学习为基础的算法企图建立端到端的规划控制器，虽然解决了计算速度慢的问题但依然存在依赖大量手动采集的专家数据和标记d额问题，且部分方法泛化性不足，难以适应不同速度、场景下的自主导航任务。
+  现有的无人机自主飞行方法主要有两类。以优化为基础的方法具有可解释性强、飞行稳定、规划可靠性高等优点，但是也面临着机载计算资源受限条件下建图、规划速度慢的问题。而另一类以深度学习为基础的算法企图建立端到端的规划控制器，虽然解决了计算速度慢的问题，但依然存在依赖大量手动采集的专家数据和标记的问题，且部分方法泛化性不足，难以适应不同速度、场景下的自主导航任务。
   
-  本研究面向四旋翼飞行器自主导航任务，提出了一种基于强化学习的自主导航算法框架并提出了一种三段式训练方法，该方法使得算法收敛所需要的时间提升了一个数量级。本研究还针对算法需求改进了现有仿真器，使其在不牺牲拟真度的同时把仿真速度提升2$\sim$6倍。最后本研究还开发了具有通用接口和稳定飞行性能的实机部署平台，整个仿真-算法-部署系统具有快速的迭代能力和良好的部署能力。
+  本研究面向四旋翼飞行器自主导航任务，提出了一种基于强化学习的端到端自主导航算法框架，利用深度强化学习对高动态、非线性的拟合能力，获得了性能较优秀的自主导航算法，该算法具有较好的泛化性。本研究还提出了一种三段式训练方法，该训练方法使得算法收敛的效率提升了一个数量级。本研究还针对算法需求改进了现有仿真器，使其在不牺牲拟真度的同时把仿真速度提升2$\sim$6倍。最后本研究还开发了具有通用接口和稳定飞行性能的实机部署平台，在基准能力测试中本部署平台也取得了比同类平台更优的能力。本研究将训练所得的算法在飞行平台上进行了测试，能够有效地完成导航任务，具备应用和部署的能力。
 
   % 关键词用“英文逗号”分隔，输出时会自动处理为正确的分隔符
   \thusetup{
@@ -18,11 +18,11 @@
 
 \begin{abstract*}
 
-  Quadrotor aircraft has agile dynamic characteristics and can fly at high speed in complex environments. It has been widely used in search and rescue, logistics, agriculture and military fields, and has high research value and application value. However, its autonomous flight is still a challenging task due to the nonlinearity of its dynamics and the complexity of the unknown environment. So far, only well-trained human pilots can exert its extreme performance, and some existing research only regards it as an ordinary load platform and cannot exert its full ability of agile flight.
+  Quadrotor has agile dynamic characteristics and can fly at high speed in complex environments. It has been widely used in search and rescue, logistics, agriculture and military fields, and has high research value and application value. However, its autonomous flight is still a challenging task due to the nonlinearity of its dynamics and the complexity of the unknown environment. So far, only well-trained human pilots can exert its extreme performance, and some existing research only regards it as an ordinary load platform and fails to exert its agile flight ability.
 
-  There are two main categories of existing autonomous flight methods for UAVs. The optimization-based method has the advantages of strong interpretability, stable flight, and good planning reliability, but it also faces the problem of slow construction and planning under the condition of limited onboard computing resources. Another type of algorithm based on deep learning attempts to establish an end-to-end planning controller. Although it solves the problem of slow calculation speed, it still has the problem of relying on a large amount of manually collected expert data and labeling, and some methods are generalizable. Insufficient, it is difficult to adapt to autonomous navigation tasks under different speeds and scenarios.
+  There are two main types of existing UAV autonomous flight methods. The optimization-based method has the advantages of strong interpretability, stable flight, and high planning reliability, but it also faces the problem of slow map building and planning under the condition of limited onboard computing resources. Another type of algorithm based on deep learning attempts to establish an end-to-end planning controller. Although it solves the problem of slow calculation speed, it still has the problem of relying on a large number of manually collected expert data and labels, and some methods are generalizable. Insufficient, it is difficult to adapt to autonomous navigation tasks under different speeds and scenarios.
 
-  This research is aimed at the autonomous navigation task of quadrotor aircraft, and proposes an autonomous navigation algorithm framework based on reinforcement learning and a three-stage training method, which increases the time required for algorithm convergence by an order of magnitude. This study also improves the existing simulator according to the algorithm requirements, so that it can increase the simulation speed by 2$\sim$6 times without sacrificing the fidelity. Finally, this study also developed a real-aircraft deployment platform with a common interface and stable flight performance. The entire simulation-algorithm-deployment system has fast iterative capabilities and good deployment capabilities.
+  This study is oriented towards the autonomous navigation task of quadrotor aircraft, and proposes an end-to-end autonomous navigation algorithm framework based on reinforcement learning. Using deep reinforcement learning to fit highly dynamic and nonlinear capabilities, an autonomous navigation algorithm with better performance is obtained. , the algorithm has good generalization. This study also proposes a three-stage training method, which improves the convergence efficiency of the algorithm by an order of magnitude. This research also improves the existing simulator according to the algorithm requirements, so that it can increase the simulation speed by 2$\sim$6 times without sacrificing the fidelity. Finally, this study also developed a real-aircraft deployment platform with a common interface and stable flight performance. In the benchmark capability test, this deployment platform also achieved better capabilities than similar platforms. In this study, the trained algorithm was tested on the flight platform, which can effectively complete the navigation task and has the ability of application and deployment.
 
   % Use comma as separator when inputting
   \thusetup{

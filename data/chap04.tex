@@ -5,17 +5,46 @@
 
 \section{硬件平台搭建}
 
-截止本报告撰写，为本研究设计的自主无人机已经迭代三个版本。如图\ref{}所示。最新版本自主无人机的基本参数如表\ref{tab_drone_param}所示。
-% 详细的硬件平台选型及各部件基本参数以及三个版本无人机的功能改进如附录\ref{}所示。
+截止本报告撰写，为本研究设计的自主无人机已经迭代三个版本。如图\ref{fig_3gen}所示。最新版本自主无人机的基本参数如表\ref{tab_drone_param}所示。详细的硬件平台选型及各部件基本参数以及三个版本无人机的功能改进如附录\ref{app1}所示。
+
+\begin{figure}
+    \centering
+    \subcaptionbox{第一代无人机}
+      {\includegraphics[width=0.47\linewidth]{1st_gen.jpg}}
+    \subcaptionbox{第二代无人机}
+      {\includegraphics[width=0.47\linewidth]{2nd_gen.jpg}}
+      \subcaptionbox{第三代无人机}
+      {\includegraphics[width=0.47\linewidth]{3rd_gen.jpg}}
+    \caption{室内场景实机任务测试}
+    \label{fig_3gen}
+\end{figure}
+% \begin{figure}
+%     \centering
+%     \includegraphics[width = 0.8\textwidth]{1st_gen.jpg}
+%     \caption{第一代无人机}
+%     \label{fig_1st_gen}
+% \end{figure}
+% \begin{figure}
+%     \centering
+%     \includegraphics[width = 0.8\textwidth]{2nd_gen.jpg}
+%     \caption{第二代无人机}
+%     \label{fig_2nd_gen}
+% \end{figure}
+% \begin{figure}
+%     \centering
+%     \includegraphics[width = 0.8\textwidth]{3rd_gen.jpg}
+%     \caption{第三代无人机}
+%     \label{fig_3rd_gen}
+% \end{figure}
 \begin{table}
     \centering
     \begin{tabular}{cc}
     \hline
         项目名称 & 指标 \\ \hline
          轴距 & 250mm \\ 
-        起飞重量 & ~ \\ 
-        单轴推力 & ~ \\ 
-        推重比 & ~ \\ 
+        起飞重量 & 1.79 \\ 
+        单轴推力 & 20.678 \\ 
+        推重比 & 4.72 \\ 
          计算平台 & Nvidia Xavier NX $\times$ 2 \\ 
         CPU算力 & 6核心1.4GHz $\times$ 2 \\ 
         GPU算力 & 21TOPS $\times$ 2 \\ 
@@ -26,7 +55,6 @@
     \label{tab_drone_param}
 \end{table}
 
-
 \section{部署系统}
 本研究基于ROS开发了一套运行于机载计算机上的部署系统。部署系统的主要功能是收集传感器的输入、提供算法接口、为飞行器保证基本的飞行能力、以及与底层执行器（在本研究中是飞行控制器）通信。本研究开发的部署系统结构如图\ref{fig_deploy_framework}所示，每个框代表一个ROS节点。其中的AutoPilot节点是部署框架的核心节点。
 \begin{figure}
@@ -35,6 +63,65 @@
     \caption{部署系统结构图}
     \label{fig_deploy_framework}
 \end{figure}
+本部署框架提供了命令转换、基础控制、基本飞行和异常处理的能力。在搭建框架之前我们首先对无人机进行了动力学建模。
+
+\subsection{动力学模型}
+如图\ref{fig_dyn}所示建立世界和无人机坐标系。世界坐标系W由一组基$(x_W, y_W, z_W)$组成，无人机坐标系B固连于无人机上，以$(x_B, y_B, z_B)$为一组基。记无人机位置为向量$p$，位置的1$\sim$3阶导数为向量$v,\ a,\ j$。我们使用旋转矩阵$R$表达无人机的姿态，使用向量$\omega$表示无人机的角速度。记$f_i$为四个轴的轴推力，$\eta$为三轴力矩，以质量做归一化的总推力为$c$。就有
+\[
+    \begin{aligned}
+        \eta & = \left[\begin{array}{c}
+        \frac{\sqrt{2}}{2} l\left(f_{1}-f_{2}-f_{3}+f_{4}\right) \\
+        \frac{\sqrt{2}}{2} l\left(-f_{1}-f_{2}+f_{3}+f_{4}\right) \\
+        \kappa_{1} f_{1}-\kappa_{2} f_{2}+\kappa_{3} f_{3}-\kappa_{4} f_{4}
+        \end{array}\right]
+        \end{aligned}
+\]
+\[
+    mc = f_1+f_2+f_3+f_4
+\]
+其中$l$是无人机的臂长，旋翼系数$\kappa_i(f_i)$是旋翼推力和旋翼扭矩间的系数。而旋翼推力$f$和悬疑扭矩$\tau$被刻画为旋翼转速命令$u$的函数 ($u\in[-1,\ 1]$)
+\[
+    \begin{aligned}
+    f(u) & = k_{2}^{f} u^{2}+k_{1}^{f} u+k_{0}^{f} \\
+    \tau(u) & = k_{2}^{\tau} u^{2}+k_{1}^{\tau} u+k_{0}^{\tau}
+    \end{aligned}
+\]
+其中$\kappa$被表示为
+\[
+    \kappa(f)=\frac{\tau\left(u=\frac{-k_{1}^{f}+\sqrt{\left(k_{1}^{f}\right)^{2}-4 k_{2}^{f}\left(k_{0}^{f}-f\right)}}{2 k_{2}^{f}}\right)}{f}
+\]
+推力$f$的控制可以表示为
+\[
+    \dot{f} = \frac{1}{\alpha_{mot}}(f_{des}-f)
+\]
+其中$\alpha_{mot}$是一个与电机硬件相关的超参数。在完成四轴推力控制后，无人机的运动学参数满足如下方程：
+\[\begin{aligned}
+    \dot{p} &= v\\
+    \dot{v} &= -gz_w+cz_b-RDR^T v\\
+    \dot{R} &= R\hat{\omega}\\
+    \dot{\omega} &= J^{-1}(\eta-\omega\times J\omega-\tau_g-AR^T v-B\omega)\\
+    \dot{\eta} &= \frac{1}{\alpha_{mot}}(\eta_{des}-\eta)\\
+\end{aligned}\]
+其中$D = \text{diag}(d_x,\ d_y,\ d_z)$是一个对角矩阵，由旋翼系数确定。$J$是无人机的转动惯量矩阵。$\tau_g$是旋翼力矩。而$A,\ B$是两个常量矩阵，其形式为
+\[
+    \mathbf{A}=\left[\begin{array}{ccc}
+        0 & * & 0 \\
+        * & 0 & 0 \\
+        0 & 0 & 0
+        \end{array}\right],\ \mathbf{B}=\left[\begin{array}{ccc}
+            * & 0 & 0 \\
+            0 & * & 0 \\
+            0 & 0 & *
+        \end{array}\right]
+\]
+
+\begin{figure}
+    \centering
+    \includegraphics[width = 0.8\textwidth]{dynamics.png}
+    \caption{无人机动力学模型}
+    \label{fig_dyn}
+\end{figure}
+
 
 \subsection{系统输入}
 系统的输入与表\ref{tab_input}所示一致。其中VIO的算法被嵌入式地集成到定位相机模块中，定位相机会直接输出飞行器的位置、姿态和速度信息。深度图的信息直接来源于深度相机模块。
