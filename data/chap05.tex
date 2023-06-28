@@ -126,8 +126,8 @@
     \begin{tabular}{ccc}
     \hline
         算法 & 3m/s速度 & 5m/s速度 \\ \hline
-        Learning & 14.3 & 19.8 \\ 
-        ego planner & 20.0 & $\backslash$ \\ 
+        Learning\cite{loquercio2021learning} & 14.3 & 19.8 \\ 
+        ego planner\cite{zhou2020ego} & 20.0 & $\backslash$ \\ 
         本方法 & 17.2 & 18.2 \\ \hline
     \end{tabular}
     \caption{算法泛化性能对比}
@@ -185,7 +185,7 @@
 \]
 其参数化的表示形式（也是飞行过程中实际使用的形式）为
 \[
-    x = \frac{t^2-1}{t^2+1},\ y = \frac{2t*(t^2-1)}{(t^2+1)^2}
+    x = \frac{t^2-1}{t^2+1},\ y = \frac{2t(t^2-1)}{(t^2+1)^2}
 \]
 在测试中设置8字形轨迹长度为5m，最大飞行速度为3m/s。选择基线Baseline算法为ego-planner配套的部署平台\cite{zhou2020ego}。绘制测试过程中目标轨迹、飞行轨迹如图\ref{fig_8traj}所示。我们还记录了飞行过程中飞行器$x,\ y$方向的加速度，如图\ref{fig_acc_x}，\ref{fig_acc_y}所示。分析三张图可以发现基线方法在飞行初末加减速时有偏离轨迹的情况。同时$x,\ y$两个方向上基线方法的加速度抖动幅度都明显大于本部署平台。因此本部署平台在轨迹追踪这一基础任务上的表现更好。
 
