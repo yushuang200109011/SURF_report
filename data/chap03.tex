@@ -55,7 +55,7 @@ PPO 算法采取Actor-Critic的训练架构，分别学习学习策略$\pi_\thet
 \[
   \alpha_{t}(\theta)=\frac{\pi_{\theta}\left(a_{t} \mid s_{t}\right)}{\pi_{\theta_{\text {old }}}\left(a_{t} \mid s_{t}\right)}
 \]
-表示新、旧策略之间的变化情况，$\epsilon$表示置信区间，$\hat{A}_t = G_t-V_{\pi_\theta}(s_t)$是优势函数（Advantage function）.PPO 算法使用广义优势估计
+表示新、旧策略之间的变化情况，$\epsilon$表示置信区间，$\hat{A}_t = G_t-V_{\pi_\theta}(s_t)$是优势函数（Advantage function）。PPO 算法使用广义优势估计
 （Generalized Advantage Estimation，GAE）[79]方法来估计$\hat{A}_t$。具体而言，GAE估计的公式如下：
 \[
   A_{t}^{G A E(\gamma, \lambda)}=\sum_{l=0}^{\infty}(\gamma \lambda)^{l} \delta_{t+l}

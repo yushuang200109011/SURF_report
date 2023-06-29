@@ -3155,9 +3155,9 @@
   \null\par
   \begingroup
     \centering
-    签\quad 名：\thu@underline[8em]{}%
-    \quad
-    日\quad 期：\thu@underline[8em]{}%
+    签\quad 名：\thu@underline[6em]{}%
+    导师签名：\thu@underline[6em]{}%
+    日\quad 期：\thu@underline[6em]{}%
     \par
   \endgroup
 }

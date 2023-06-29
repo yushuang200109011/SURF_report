@@ -1,7 +1,7 @@
 % !TeX root = ../thuthesis-example.tex
 
 \chapter{仿真器改进}
-本章主要介绍高并行度仿真器的设计和开发。本研究以苏黎世联邦理工大学开发的FLightmare仿真器为基础，增加了并行设计以加快仿真速度。由于该仿真器使用Gazebo作为物理引擎，Unity作为渲染引擎，因此该仿真器仿真度较高。本章将介绍Flightmare仿真器的基本情况和本研究所做的改进。
+本章主要介绍高并行度仿真器的设计和开发。本研究以苏黎世联邦理工大学开发的FLightmare\cite{flightmare}仿真器为基础，增加了并行设计以加快仿真速度。由于该仿真器使用Gazebo作为物理引擎，Unity作为渲染引擎，因此该仿真器仿真度较高。本章将介绍Flightmare仿真器的基本情况和本研究所做的改进。
 
 \section{仿真器基本情况}
 FLightmare仿真器\cite{flightmare}是苏黎世联邦理工大学开发的一款四旋翼飞行器仿真平台。使用Gazebo作为物理引擎并使用Unity作为渲染引擎，两个模块可分开运行。仿真器的原始结构如图\ref{fig_simulator_origin}所示。
