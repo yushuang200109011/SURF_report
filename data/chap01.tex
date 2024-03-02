@@ -1,115 +1,43 @@
 % !TeX root = ../thuthesis-example.tex
 
-\chapter{引言}
-\label{introduction}
-对大部分的无人系统而言，为了让其能够自主完成任务，任务通常被分解为感知、决策、控制三个子任务，并要求在任务过程中有稳定的定位和通信。四旋翼飞行器是一种具有敏捷动作能力的飞行器，考虑到实际应用场景，飞行器往往需要具备自主感知和决策的能力以摆脱对外部定位、通信和操纵的依赖。在这种情况下四旋翼飞行器的自主导航是极具挑战性的系统问题。本研究借助强化学习这一交互式学习的人工智能算法，提出了一种三段式训练方法以解决复杂环境下四旋翼飞行器的自主导航问题，提升算法收敛速度，提高算法泛化性和飞行稳定性。同时本研究还针对算法训练和实机部署的需求开发了一整套仿真、部署平台。
+\chapter{研究背景}
+\label{background}
+在机器人学研究中，视觉惯性测距（VIO）在导航、定位和感知任务中发挥着举足轻重的作用。VIO 系统通过融合来自视觉和惯性传感器的数据来估计机器人的姿态（位置和方向）。近年来，人们提出了许多 VIO 方法，例如直接使用像素强度估算摄像机运动的直接方法，以及基于特征的方法等。其中，基于特征的方法使用图像特征（点、线或平面）来估计传感器位姿和周围环境的地图。
+\begin{figure}
+  \centering
+  \includegraphics[width = 0.75\textwidth]{plbg.png}
+  \label{fig_plbg}
+  \caption{图像中的点线特征}
+\end{figure}
+基于点的 VIO 算法发展最为成熟，现有点VIO算法在精度和速度方面都表现出了卓越的性能，可以应用于需要实时跟踪的场景。然而，在低纹理环境或重复纹理环境中（例如走廊、道路、开阔水域等），由于点特征信息匮乏，基于点的 VIO 算法会出现性能下降的问题。为了利用环境中丰富的边缘信息，克服点信息失效的问题，研究人员进一步开发了基于线特征的VIO算法，并将线特征作为辅助构建了点线联合的VIO框架，现有框架包括PL-SLAM[4]，PL-VINS[5]等。但是，由于线特征存在参数化复杂且耗时的问题，现有的点线联合VIO框架难以在嵌入式设备上实时运行，使得线特征的精度增益难以在小型无人设备（比如无人机）上得到实现。 为了构建一个可以在嵌入式小型无人设备上实时运行的点线VIO系统，本工作首先基于神经网络的特征推理网络，提出了点线融合的SP-SOLD2网络，并利用自监督训练使得该网络可以通过一次推理得到特征点、特征线以及同时适用于点线匹配的描述子；为了将各类点线提取和匹配方法灵活应用于VIO任务中，本工作构建了一个前端方法可自定义的NN-PL-VIO框架，并利用SP-SOLD2点线联合网络以及一系列速度优化方法，得到了一个可以在嵌入式设备Orin NX上实时运行的点线联合VIO系统。
 
-下面将详细介绍研究背景，提出三个该领域现存的主要挑战并引出研究内容。最后介绍本研究报告各章节的构成。
+\section{点特征提取及描述方法}
+点特征提取方法可以简单地分类为传统方法和深度学习方法两大类，其中传统方法是通过一系列数学计算得到特征点及其描述子，具有数学可解释性；而深度学习方法则是通过设计网络来端到端推理定位特征点，和描述子可以不耦合。一些常见的传统点特征方法如下：
+\begin{enumerate}
+  \item Harris角点检测算法（Harris Corner Detection）：该算法通过计算图像中每个像素点的角点响应函数来检测角点。角点响应函数基于图像中局部区域的亮度变化，对角点位置具有较高的响应值。Harris角点检测算法具有旋转不变性和一定程度的尺度不变性。
+  \item Shi-Tomasi角点检测算法（Shi-Tomasi Corner Detection）：该算法是对Harris角点检测算法的改进。它使用了一个更加鲁棒的角点响应函数，能够在保持高角点检测率的同时提供更好的角点定位精度。
+  \item SIFT（尺度不变特征变换，Scale-Invariant Feature Transform）：SIFT是一种广泛应用的特征点提取算法，能够在不同尺度和旋转条件下提取稳定的特征点。SIFT算法通过在图像中检测局部极值点，并在多个尺度上计算尺度空间特征向量，得到具有尺度不变性的特征描述子。
+  \item SURF（加速稳健特征，Speeded-Up Robust Features）：SURF算法是对SIFT算法的改进，通过提出一种快速的特征点检测和描述子计算方法，实现了更高的计算效率。SURF算法利用图像的Hessian矩阵来检测特征点，并使用Haar小波响应描述子来描述特征。
+  \item FAST（Features from Accelerated Segment Test）：FAST算法是一种快速的角点检测算法，适用于实时应用。该算法基于像素灰度值的变化来检测角点，通过高效的特征点筛选策略提高了检测速度。
+  \item ORB（Oriented FAST and Rotated BRIEF）：ORB算法是对FAST和BRIEF（Binary Robust Independent Elementary Features）算法的结合。它在FAST算法的基础上引入了旋转不变性，并使用二进制描述子来进行特征匹配，具有较高的计算效率和良好的性能。
+\end{enumerate}
+而基于神经网络的点特征提取方法可以分为两种类别：检测和描述分离的方法与端到端匹配的方法。其中检测和描述分离的方法是设计两个网络或者一个联合网络，分别进行点特征的检测和点描述子的提取；而端到端匹配的方法则是直接设计和训练一个网络，此网络可以接受两个输入图像，直接给出特征匹配结果。基于神经网络的方法总结如下表：
+\begin{table}[!ht]
+  \centering
+  \begin{tabular}{|c|c|c|}
+  \hline
+      名称 & 类型 & 描述 \\ \hline
+      ASLFeat[6] & 点检测 & \parbox[c]{6cm}{使用可变形卷积网络，利用固有的特征层次，提出了一种多级检测机制，该机制不仅在没有额外学习权重的情况下可以恢复低层细节以进行精确的关键点定位} \\ \hline
+      SuperPoint[7] & 点检测和描述子提取联合 & \parbox[c][15ex]{6cm}{介绍了一个自监督框架，利用运行在全尺寸图像上的全卷积模型，在一个前向传递中同时计算像素级兴趣点位置和关联描述子} \\ \hline
+      R2D2[8] & 点检测和描述子提取联合 & \parbox[c]{6cm}{在D2-Net基础上考虑了特征检测的可重复性和可靠性，为检测得分设计了损失函数，使用全卷积网络推理特征点及其描述子} \\ \hline
+      LoFTR[9] & 端到端匹配 &\parbox[c]{6cm}{ 使用了Transformer中的自我和交叉注意力层(self and cross attention layers)来获取两个图像的特征描述符，实现无检测器的局部特征匹配。} \\ \hline
+      Patch2Pix[10] & 端到端匹配 & \parbox[c]{6cm}{建立了一种新的匹配细化网络，首先得到 patch-level 的匹配，再细化到 pixel-level 的匹配，网络可以同时细化匹配并排除错误匹配，且训练不需要像素级的 GT 对应关系。} \\ \hline
+      SuperGlue[11] & 描述子提取 & \parbox[c]{6cm}{提出了一种能够同时进行特征匹配以及滤除外点的网络，基于注意力机制提出了一种灵活的内容聚合机制，这其能够同时感知潜在的3D场景以及进行特征匹配。} \\ \hline
+  \end{tabular}
+\end{table}
 
 \section{研究背景}
-\label{background}
-\subsection{四旋翼飞行器发展背景}
-四旋翼飞行器（quadrotor aircraft）是用四个旋翼产生升力的多轴飞行器，是直升机的一种。随着惯性测量单元（Inertial measurement unit, IMU）、飞行控制器（Flight control unit, FCU）和电子调速器（Electronic speed control, ESC）等电子器件的出现，四旋翼飞行器开始使用电传操纵系统控制，并逐渐发展为一种结构简单使用方便的飞行平台。四旋翼飞行器是迄今为止最为灵活、敏捷的无人飞行器之一\cite{verbeke2018experimental}\cite{ackermann2020ai}。得益于其敏捷的动力学特性，它们可以穿越复杂地形到达人类和大型机械无法到达的地方。四旋翼飞行器已经在搜索救援、物流、基础设施、娱乐、农业甚至军事领域得到了广泛的应用。例如，美国国防部高级研究计划局（DARPA）在具备自主行动的无人机（集群）方向就先后设立了面向GPS拒止环境下的快速轻量级自主无人机（FLA）、面向未来复杂城市环境作战的进攻型机器人集群战术系统（OFFSET）、人机分层协作作战体系（ACE）等项目\cite{darpa2023}。
-
-相较于其它无人系统，四旋翼飞行器在执行自主任务时具有以下三个显著特点：
-\begin{enumerate}
-  \item 载荷资源受限。四旋翼飞行器作为一种空中无人平台，在任务目标和续航时间确定的情况下，其载荷资源受严格限制。飞行器所搭载的传感、计算、通信设备受载荷限制影响，其提供的感知、通信质量往往比其他无人系统更低。
-  \item 计算资源受限。在载荷首先的前提下，机载计算机的规模严格受限，同时考虑到功率的限制，机载计算机的计算能力往往远低于同一时代的消费级计算机。
-  \item 动力学高度复杂。相较于无人车和其它飞行器，四旋翼无人机的动力学高度复杂且非线性。同时由于其飞行特性，四旋翼无人机对决策、控制的稳定性和连续性都有较高要求。
-\end{enumerate}
-在上述情况下，自主导航任务对算法提出了更高要求，感知算法需要对传感器噪声、运动带来的模糊和不断变化的环境具有鲁棒性，而决策和控制算法需要在包含噪声的感知结果下利用有限的计算资源做出稳定而有效的规划。现有较成熟的方法可大致分为两类：基于优化的方法和基于学习的方法，详细的介绍将在\ref{related_works}节中展开。
-
-\subsection{强化学习发展背景}
-强化学习（Reinforcement learning, RL）是机器学习的一个分支。其工作流程是智能体（Agent）在与环境（Environment）交互的过程中不断获得奖励（Reward），通过试错的方式学习到最优策略（Policy）。其工作原理如图\ref{fig_RL}所示。深度学习（Deep learning, DL）具有学习特征表示的梯度信息，而强化学习算法可以利用环境信息产生梯度并学习最佳策略。二者结合的方法被称为深度强化学习，已在各个领域取得了很多成就。例如2016年谷歌开发的AlphaGo\cite{silver2016mastering}在围棋人机大赛中战胜世界冠军李世石，标志着人工智能又一里程碑式的胜利。而后该团队推陈出新，提出了在不使用人类棋局数据情况下战胜AlphaGo的AlphaZero\cite{silver2017mastering}、在StarCraft \uppercase\expandafter{\romannumeral2}中战胜职业玩家的AlphaStar\cite{vinyals2019grandmaster}、可以预测蛋白质结构的AlphaFold\cite{senior2020improved}、可以高效计算矩阵乘法的AlphaTensor\cite{fawzi2022discovering}等AI。同时，深度强化学习在无人驾驶、机器人控制等领域也取得了很多成果\cite{chiang2019learning}\cite{liu2022safe}。后续强化学习还产生了多个分支，例如多智能体强化学习、安全强化学习等。
-\begin{figure}
-  \centering
-  \includegraphics[width = 0.6\textwidth]{RL.png}
-  \caption{强化学习工作原理}
-  \label{fig_RL}
-\end{figure}
-
-\section{相关工作}
-\label{related_works}
-\subsection{自主导航算法}
-四旋翼飞行器自主导航算法的研究已有较多成果，大体上看可以分为两类：基于优化的规划方法和基于学习的规划方法。下面将分别介绍这两类方法的研究现状。
-\subsubsection{基于优化的规划方法}
-同一般的无人系统一样，自主导航任务被划分为感知、规划、控制三个阶段。感知算法的任务是从传感器原始输入（如深度相机、激光雷达等）构建地图。现有的一些工作提出了从较低精度感知数据构建较高精度地图的方法\cite{heng2014autonomous}\cite{saeedi20173d}\cite{faessler2016autonomous}。而另一部分工作专注于规划无碰撞的路径而不考虑感知精度\cite{allen2016real}\cite{liu2018search}。近年来很多工作提出将这些在线建图和规划算法结合的系统，以实现在未知环境中的导航任务。例如，提出快速构建欧基里得符号距离场（Euclidean Signed Distance Fields, ESDFs）的VoxBlox\cite{oleynikova2017voxblox}、使用局部规划以提升规划效率的FASTER\cite{tordesillas2019faster}、无需构建ESDFs的规划方法EGO-Planner\cite{zhou2020ego}、考虑多无人机协同规划的EGO-swarm\cite{zhou2021ego}等。
-
-从工程上看将导航任务分为感知、规划和控制三个子任务有不少优点：例如系统可以在不同子任务间实现并行、利用建图和规划的阶段性结果使整个系统更具可解释性等。但是三个子任务独立进行的方式忽略了不同子任务间的影响，带来了可能的累计误差，同时他们的顺序性（即下一阶段的输入为上一阶段的输出）引入了额外的延迟，为高速敏捷的飞行带来了困难\cite{falanga2019fast}。
-
-\subsubsection{基于学习的规划方法}
-总结上述工作，受限于机载计算资源和传感器精度，低延迟和高精度的感知和规划往往难以兼顾\cite{falanga2019fast}。近年来一些工作提出直接从数据中学习端到端策略而无需区分明确的感知和规划阶段。这些策略是通过模仿人类在仿真器\cite{sadeghi2016cad2rl}\cite{loquercio2021learning}或现实世界\cite{gandhi2017learning}中收集的经验训练得到的。最近的工作表明在仿真器中训练得到的敏捷的规划和控制策略可以被零成本（Zero-Shot）地迁移至部署平台\cite{kaufmann2020deep}\cite{loquercio2021learning}。但此类方法需要大量经验性的人工数据或是\cite{sadeghi2016cad2rl}或是设计复杂的专家（Expert）方法以采集足够数量的训练数据\cite{loquercio2021learning}。
-
-\subsection{仿真器}
-为加快开发速度、降低试验成本，上述两类方法均需要真实可靠的仿真器作为训练、验证的工具。尤其是随着深度强化学习技术发展，使用具有更强建模能力的基于深度学习技术的方法成为了无人系统领域的未来趋势。对于以四旋翼飞行器为代表的无人系统仿真器主要有以下三点需求：
-\begin{enumerate}
-  \item 仿真器能够较为真实地遵循机器人自身的物理动力学定律，并能高效地解算机器人和环境产生的交互作用。
-  \item 仿真器能够集成IMU、相机、轻微系统、激光雷达等传感器。因为，这些传感器普遍应用于各项无人系统中。
-  \item 仿真器能够和机器人操作系统（Robot operating system, ROS）的生态系统进行对接。ROS作为当今最完善的机器人软件系统，已经成为了标准的开发机器人应用的主流工具。
-\end{enumerate}
-国内外已有的针对无人机的仿真器主要有以下三个：
-
-微软（Microsoft）公司于2017年提出了AirSim无人机驾驶自动控制仿真平台\cite{airsim2017}，可实现基于虚幻引擎的无人机驾驶自动控制仿真功能。同时具备普通相机，立体相机，激光雷达，全球定位系统（GPS），IMU，磁力计等传感器。
-
-苏黎世联邦理工学院提出了Flightmare四旋翼飞行器仿真平台\cite{flightmare}，由两个主要组件组成：基于Unity的渲染引擎和可用于动力学模拟的物理引擎。且两个组件完全解耦、可以独立运行。该仿真器支持ROS环境，平台上集成了丰富的传感器，包括普通相机，立体相机，IMU等。
-
-多伦多大学提出了Gym-pybullet-drones四旋翼飞行器仿真平台\cite{pybullet}，同样集成了普通相机，立体相机，IMU等的传感器，可实现无人机集群的模拟，同时支持与ROS2系统通信。
-
-三者采用了不同的物理引擎和和界面渲染，都支持ROS、视觉传感器模块，且考虑了空气动力学因素。但是三者的仿真运行速度较慢，仿真每秒状态数（Frame per second, FPS）$<100$。难以满足强化学习等需要大量仿真数据算法的需求。
-
-\subsection{部署平台}
-四旋翼飞行器部署平台具有结构相对简单、成本相对较低的优点。常见的科研用四旋翼无人机平台，如Crazyfile\cite{crazyfly}，具有结构简单、结实耐用的优点，但并不搭载感知和计算单元，依靠上位机完成整个任务流程。此类平台常用于做科研算法快速验证而无法实际部署应用，如图\ref{fig_crazyfile}所示。最近一些无人系统工作选择将其仿真平台硬件开源\cite{zhou2020ego}，但其部署平台和部署系统接口高度定制化，难以二次开发，如图\ref{fig_egofly}。一些国内外公司专门研发了科研用无人机\cite{amove}，但其商品化程度高，飞行性能低，不便有效的改装和定制，如图\ref{fig_amove}。
-\begin{figure}
-  \centering
-    \includegraphics[width = 0.6\textwidth]{crazyfile.png}
-    \caption{Crazyfile无人机}
-    \label{fig_crazyfile}
-\end{figure}
-\begin{figure}
-  \centering
-    \includegraphics[width = 0.6\textwidth]{egofly.png}
-    \caption{ego-planner项目硬件开源的无人机}
-    \label{fig_egofly}
-\end{figure}
-\begin{figure}
-  \centering
-    \includegraphics[width = 0.6\textwidth]{amove.png}
-    \caption{市售科研用无人机}
-    \label{fig_amove}
-\end{figure}
-
-\section{研究目的}
-\label{target}
-本研究面向面向以四旋翼飞行器为代表的无人机的自主导航任务，设计一种高效的自主导航算法。自主导航任务的定义如图\ref{fig_task_define}所示。自主导航指的是一类在没有环境地图，没有外部定位、通信和操纵指令情况下自主通过未知区域并到达目标点的任务。
-\begin{figure}
-  \centering
-  \includegraphics[width = 0.97\textwidth]{task.png}
-  \caption{自主导航任务示意图}
-  \label{fig_task_define}
-\end{figure}
-
-总结\ref{background}和\ref{related_works}节中提到的需求和研究现状，以四旋翼无人机完成自主导航任务存在以下三个挑战：
-\begin{enumerate}
-  \item 常用的无人机仿真器存在拟真度和仿真速度的矛盾。根据调研和实验，拟真度较高的仿真器虽然可以实现零成本部署，但采集数据速度慢，采集一条轨迹数据需要约90s时间\cite{loquercio2021learning}。而采集数据速度较快的仿真器往往难以直接部署\cite{zhu2022viola}。
-  \item 现存的无人机自主导航算法难以满足需求。基于感知算法的使用优化方法的规划器规划速度慢，算力需求高\cite{ren2022bubble}。而基于人类专家数据的深度学习方法虽然很好的解决了规划速度的问题，但需要较大量的人类专家数据\cite{loquercio2021learning}，需要大量经验性的设定。
-  \item 目前尚没有一种功能齐全、接口丰富、运行稳定的成熟的无人机平台供自主导航任务使用。
-\end{enumerate}
-
-本研究聚焦无人机在无外部定位、通信、操纵情况下的自主导航任务。对应于上述三个挑战，主要研究内容有三：
-\begin{enumerate}
-  \item 基于现有仿真器，通过增加并行度等方法提高仿真器采集数据的速度以满足强化学习算法对大量数据的需求。
-  \item 设计一种基于强化学习的无人机自主导航算法，并设计配套的训练方法。在利用强化学习算法解决算法运行速度慢、需要大量专家数据这两个问题的同时也尽可能规避其自身存在的数据效率低、收敛慢等问题。
-  \item 设计并搭建具有自主定位、自主计算的四旋翼无人机并设计一套部署系统。该部署系统应集成多种传感器和多种控制器供选择，并预留完善的算法接口。最后在该算法平台上验证自主导航算法的实际飞行效果。
-\end{enumerate}
-本研究的研究框架如图\ref{fig_outline}所示。
-\begin{figure}
-  \centering
-  \includegraphics[width = 1\textwidth]{outline.png}
-  \caption{研究框架示意图}
-  \label{fig_outline}
-\end{figure}
-
-本研究是一个系统性研究，其中强化学习算法设计部分为主要的创新点。仿真器和部署平台包含则较多工程技巧，工作量较大，但这是完成算法训练和算法验证必不可少的环节。同时本项目所设计的仿真器和部署平台将作为课题组后续相关研究重要的基础设施。
+test
 
 \section{各章节概述}
 \label{outline}

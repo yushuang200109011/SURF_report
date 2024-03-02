@@ -8,7 +8,7 @@
 %% 
 %% This is a generated file.
 %% 
-%% Copyright (C) 2005-2023 by Tsinghua University TUNA Association <tuna@tsinghua.edu.cn>
+%% Copyright (C) 2005-2024 by Tsinghua University TUNA Association <tuna@tsinghua.edu.cn>
 %% 
 %% This work may be distributed and/or modified under the
 %% conditions of the LaTeX Project Public License, either version 1.3c
@@ -2890,7 +2890,7 @@
     \centering
     \includegraphics{tsinghua-name-bachelor.pdf}%
     \vskip 0.94cm%
-    {\sffamily\bfseries\xiaochu\ziju{0.1}钱学森力学班2020级开放创新挑战研究（ORIC）结题报告\par}%
+    {\sffamily\bfseries\xiaochu\ziju{0.1}高年级本科生研究员（SURF）结题报告\par}%
   \endgroup
   \vskip 1.8cm%
   \begingroup
@@ -2932,10 +2932,10 @@
     \def\thu@name@title@format##1##2{%
       \thu@stretch{3em}{##1}\quad ##2%
     }%
-    \thu@info@item{院系}{}{\thu@department}%
-    \thu@info@item{专业}{}{\thu@discipline}%
+    \thu@info@item{班级}{}{\thu@discipline}%
     \thu@info@item{姓名}{\thu@name@title}{\thu@author}%
-    \thu@info@item{指导教师}{\thu@name@title}{\thu@supervisor}%
+    \thu@info@item{实习企业}{}{\thu@department}%
+    \thu@info@item{企业导师}{\thu@name@title}{\thu@supervisor}%
     \endgroup
   \vskip 1.4cm%
   \begingroup
@@ -3155,9 +3155,9 @@
   \null\par
   \begingroup
     \centering
-    签\quad 名：\thu@underline[6em]{}%
-    导师签名：\thu@underline[6em]{}%
-    日\quad 期：\thu@underline[6em]{}%
+    签\quad 名：\thu@underline[8em]{}%
+    \quad
+    日\quad 期：\thu@underline[8em]{}%
     \par
   \endgroup
 }
@@ -3263,7 +3263,8 @@
   itemindent=0pt,
 }
 \newcommand{\thu@statement@text}{本人郑重声明：所呈交的结题报告，是本人在导师指导下
-  ，独立进行研究工作所取得的成果。尽我所知，除文中已经注明引用的内容外，本结题报告的研究成果不包含任何他人享有著作权的内容。对本报告所涉及的研究工作做出贡献的
+  ，独立进行研究工作所取得的成果。尽我所知，除文中已经注明引用的内容外，本学位论
+  文的研究成果不包含任何他人享有著作权的内容。对本报告所涉及的研究工作做出贡献的
   其他个人和集体，均已在文中以明确方式标明。}
 \newcommand{\thu@signature}{签\hspace{1em}名：}
 \newcommand{\thu@backdate}{日\hspace{1em}期：}
