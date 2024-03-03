@@ -21,23 +21,113 @@
   \item FAST（Features from Accelerated Segment Test）：FAST算法是一种快速的角点检测算法，适用于实时应用。该算法基于像素灰度值的变化来检测角点，通过高效的特征点筛选策略提高了检测速度。
   \item ORB（Oriented FAST and Rotated BRIEF）：ORB算法是对FAST和BRIEF（Binary Robust Independent Elementary Features）算法的结合。它在FAST算法的基础上引入了旋转不变性，并使用二进制描述子来进行特征匹配，具有较高的计算效率和良好的性能。
 \end{enumerate}
-而基于神经网络的点特征提取方法可以分为两种类别：检测和描述分离的方法与端到端匹配的方法。其中检测和描述分离的方法是设计两个网络或者一个联合网络，分别进行点特征的检测和点描述子的提取；而端到端匹配的方法则是直接设计和训练一个网络，此网络可以接受两个输入图像，直接给出特征匹配结果。基于神经网络的方法总结如下表：
+而基于神经网络的点特征提取方法可以分为两种类别：检测和描述分离的方法与端到端匹配的方法。其中检测和描述分离的方法是设计两个网络或者一个联合网络，分别进行点特征的检测和点描述子的提取；而端到端匹配的方法则是直接设计和训练一个网络，此网络可以接受两个输入图像，直接给出特征匹配结果。基于神经网络的方法总结如表\ref{tab_NNPoint}：
 \begin{table}[!ht]
   \centering
   \begin{tabular}{|c|c|c|}
   \hline
       名称 & 类型 & 描述 \\ \hline
-      ASLFeat[6] & 点检测 & \parbox[c]{6cm}{使用可变形卷积网络，利用固有的特征层次，提出了一种多级检测机制，该机制不仅在没有额外学习权重的情况下可以恢复低层细节以进行精确的关键点定位} \\ \hline
-      SuperPoint[7] & 点检测和描述子提取联合 & \parbox[c][15ex]{6cm}{介绍了一个自监督框架，利用运行在全尺寸图像上的全卷积模型，在一个前向传递中同时计算像素级兴趣点位置和关联描述子} \\ \hline
-      R2D2[8] & 点检测和描述子提取联合 & \parbox[c]{6cm}{在D2-Net基础上考虑了特征检测的可重复性和可靠性，为检测得分设计了损失函数，使用全卷积网络推理特征点及其描述子} \\ \hline
-      LoFTR[9] & 端到端匹配 &\parbox[c]{6cm}{ 使用了Transformer中的自我和交叉注意力层(self and cross attention layers)来获取两个图像的特征描述符，实现无检测器的局部特征匹配。} \\ \hline
-      Patch2Pix[10] & 端到端匹配 & \parbox[c]{6cm}{建立了一种新的匹配细化网络，首先得到 patch-level 的匹配，再细化到 pixel-level 的匹配，网络可以同时细化匹配并排除错误匹配，且训练不需要像素级的 GT 对应关系。} \\ \hline
-      SuperGlue[11] & 描述子提取 & \parbox[c]{6cm}{提出了一种能够同时进行特征匹配以及滤除外点的网络，基于注意力机制提出了一种灵活的内容聚合机制，这其能够同时感知潜在的3D场景以及进行特征匹配。} \\ \hline
+      ASLFeat[6] & 点检测 & \parbox[c][16ex]{7cm}{使用可变形卷积网络，利用固有的特征层次，提出了一种多级检测机制，该机制不仅在没有额外学习权重的情况下可以恢复低层细节以进行精确的关键点定位} \\ \hline
+      SuperPoint[7] & 点检测和描述子提取联合 & \parbox[c][13ex]{7cm}{介绍了一个自监督框架，利用运行在全尺寸图像上的全卷积模型，在一个前向传递中同时计算像素级兴趣点位置和关联描述子} \\ \hline
+      R2D2[8] & 点检测和描述子提取联合 & \parbox[c][13ex]{7cm}{在D2-Net基础上考虑了特征检测的可重复性和可靠性，为检测得分设计了损失函数，使用全卷积网络推理特征点及其描述子} \\ \hline
+      LoFTR[9] & 端到端匹配 &\parbox[c][13ex]{7cm}{ 使用了Transformer中的自我和交叉注意力层(self and cross attention layers)来获取两个图像的特征描述符，实现无检测器的局部特征匹配。} \\ \hline
+      Patch2Pix[10] & 端到端匹配 & \parbox[c][16ex]{7cm}{建立了一种新的匹配细化网络，首先得到 patch-level 的匹配，再细化到 pixel-level 的匹配，网络可以同时细化匹配并排除错误匹配，且训练不需要像素级的 GT 对应关系。} \\ \hline
+      SuperGlue[11] & 描述子提取 & \parbox[c][16ex]{7cm}{提出了一种能够同时进行特征匹配以及滤除外点的网络，基于注意力机制提出了一种灵活的内容聚合机制，这其能够同时感知潜在的3D场景以及进行特征匹配。} \\ \hline
   \end{tabular}
+  \caption{基于神经网络的点特征提取方法}
+  \label{tab_NNPoint}
 \end{table}
 
-\section{研究背景}
-test
+\section{线特征提取描述方法}
+线特征的提取方法可以分为三种类别：基于全局哈夫的方法、基于局部信息的方法，以及基于深度学习的方法，下面将分别介绍。
+\subsection{基于全局哈夫的方法}
+基于任何一个点都可能是线上的点的假设，此方法对所有点按照下式进行Hough变换：
+\[
+  \rho = x_0\cos{\theta}+y_0\sin{\theta}
+\]
+则一个点$(x_0,y_0)$将对应Hough平面下的一系列曲线；Hough平面上产生交点的曲线，则对应原平面上同线的一系列点，如图\ref{fig_hough}所示。
+\begin{figure}
+  \centering
+  \includegraphics[width = 0.75\textwidth]{hough.png}
+  \label{fig_hough}
+  \caption{哈夫变换示意图}
+\end{figure}
+利用Hough变换，此方法利用严格的数学推导得到共线点关系，但是作为一个全局方法，需要对所有像素进行操作（包括预处理和变换），复杂度较高，并且空间定量搜索方式提取的数量和质量一般，不能定位线段端点。
+
+\subsection{基于局部信息的方法}
+此类方法利用局部信息（图像梯度和边缘检测结果等）探寻可能存在线段的位置，提取线段。LSD[12]是一种典型的基于局部信息的线段提取方法，如图\ref{fig_LSD}所示。该算法首先对输入图像进行多尺度的高斯滤波，以便检测不同尺度下的线段。接着，LSD会计算图像的梯度信息，找出梯度变化显著的区域，作为线段潜在区域。然后，通过区域合并方法，相邻的梯度变化显著的像素点会被组合成候选线段，计算线段位置、长度、方向和梯度等参数。为了去除冗余线段，LSD在最后会使用非极大值抑制和滤波的方法来筛选得到最终的线段提取结果。
+\begin{figure}
+  \centering
+  \includegraphics[width = 0.75\textwidth]{LSD.png}
+  \label{fig_LSD}
+  \caption{LSD线提取方法}
+\end{figure}
+基于局部信息的方法虽然一定程度上降低了线段提取的复杂度，但是算法仍为像素级操作，空间复杂度高，并且缺乏语义和全局约束信息，此类方法易受到噪声干扰。
+
+\subsection{基于深度学习的方法}
+基于深度学习的线段提取方法利用神经网络来自动检测和提取图像中的线段，能够通过网络设计更灵活地融合全局和局部信息，得到准确度和实用性更好的线段提取结果。根据网络设计的思路，可以分为Top-Down策略、Bottom-Up策略和Tri-Point策略。
+\begin{figure}
+  \centering
+  \includegraphics[width = 0.75\textwidth]{DL.png}
+  \label{fig_DL}
+  \caption{基于深度学习的线特征提取方法}
+\end{figure}
+\begin{enumerate}
+  \item Top-Down策略：自上而下的策略核心是从线段可能存在的区域“挤压”得到线段提取结果，故而网络提取的目标是与线段相关的概率图。
+  \item Bottom-Up策略：自下而上的策略核心是先找到线段的端点，再从端点定位线段。
+  \item Tri-Point策略：Tri-Point策略核心是定位线上的某些点，用多个点和线段之间的距离关系定位线段。
+\end{enumerate}
+
+线提取方法总结如表\ref{tab_Line}所示：
+\begin{table}[!ht]
+  \centering
+  \begin{tabular}{|c|c|c|c|c|}
+  \hline
+      类别 & 典型工作 & 优点 & 缺点 & 典型应用 \\ \hline
+      \parbox[c][13ex]{1.4cm}{基于全局哈夫的方法} & \makecell{哈夫变换\\哈夫概率变换} & \parbox[c][16ex]{3.8cm}{原理简单，数学可解释； 有一定抗干扰能力} & \parbox[c][16ex]{3.8cm}{缺少局部特征和语义约束； 没有做线段切分} & \makecell{灭点检测\\地平线检测} \\ \hline
+      \parbox[c][13ex]{1.4cm}{基于局部信息的方法} & \makecell{LSD[12]\\EDLines[13]} & \parbox[c][16ex]{3.8cm}{计算量较低； 数学可解释； 有效利用局部连接信息} & \parbox[c][16ex]{3.8cm}{对噪声敏感； 缺乏全局感知和语义信息} & \makecell{VO\\视觉定位\\VSLAM} \\ \hline
+      \parbox[c][13ex]{1.4cm}{基于深度学习的方法} & \makecell{MLSD[14]\\L-CNN[15]\\SOLD2[16]\\DeepLSD[17]} & \parbox[c][13ex]{3.8cm}{端到端处理； 融合了局部和全局信息} & \parbox[c][16ex]{3.8cm}{受网络设计、训练数据干扰较大； GPU计算需要实时优化} & \makecell{三维重建\\图像分割} \\ \hline
+  \end{tabular}
+  \caption{线特征提取方法总结}
+  \label{tab_Line}
+\end{table}
+基于深度学习的方法虽然有着高精度和端到端运行的优势，但效果依赖于数据集和网络设计，速度依赖于硬件性能和网络复杂度，尚需泛化性和实时性优化。
+
+\section{线特征描述子提取方法}
+线的描述子是一种用来表示和描述检测到的线段特征的数据结构，也即线段的参数化形式。描述子利用线段的几何特性和其他相关信息，进行线段的匹配、跟踪等任务。根据线特征描述子所利用的信息，可以将其分为基于统计的方法、基于结构的方法和基于深度学习的方法。
+\subsection{基于统计的方法}
+\begin{figure}
+  \centering
+  \includegraphics[width = 0.75\textwidth]{LBD.png}
+  \label{fig_LBD}
+  \caption{LBD方法示意图}
+\end{figure}
+基于统计的方法通过计算统计线相关的特征来描述线段，比如线梯度和线强度等。LBD是一种典型的基于统计描述方法。它采用了二进制编码，以紧凑的方式表示线段的局部特征，这使得它在快速匹配和检索任务中表现出色。LBD描述子具有旋转不变性，可以处理不同方向的线段，而无需进行旋转归一化，如图\ref{fig_LBD}所示。此外，它还具有尺度不变性，可适应不同尺度的线段。LBD描述子对抗噪声，适应线段形状的小变化，因此在实际应用中非常稳定。由于其二进制性质，LBD描述子可通过位运算进行高效匹配，这对于需要实时性能和大规模图像数据库的应用非常有帮助。LBD描述子关注线段周围的局部信息，从而能够有效地区分不同的线段模式。它通常用于线段匹配任务，如基于线段的目标识别、基于线段的姿态估计以及基于线段的视觉SLAM。因此，LBD描述子在计算机视觉领域扮演着重要的角色，为线段相关的应用提供了强大的工具。
+
+\subsection{基于深度学习的方法}
+基于深度学习的方法通过设计描述子网络来提取线段的描述子，其设计损失函数的理念是使得匹配的线段在描述空间中尽可能相近，使得不匹配的线段在描述空间中尽可能远离。根据网络推理的策略，可以将深度学习方法划分为基于线段支持区域的和不基于线段支持区域的两个种类。
+\begin{enumerate}
+  \item 基于线段支持区域的方法：在网络设计和训练中都用到线段周围的局部特征，并在此基础上进一步加入局部特征的描述子。
+  \item 基于线段支持区域的方法：在网络设计和训练中都用到线段周围的局部特征，并在此基础上进一步加入局部特征的描述子。
+\end{enumerate}
+
+线段描述子提取方法总结如表\ref{tab_LineDes}所示。
+\begin{table}[!ht]
+  \centering
+  \begin{tabular}{|c|c|c|c|c|}
+  \hline
+      类别 & 典型工作 & 优点 & 缺点 & 典型应用 \\ \hline
+      Statistic-based & \makecell{LBD[18]\\MSLD[19]} & \parbox[c][13ex]{3.8cm}{一定程度抗干扰； 数学可解释} & \parbox[c][13ex]{3.8cm}{对低纹理场景敏感； 缺乏全局语义信息} & \makecell{视觉定位\\VSLAM} \\ \hline
+      Structure-based & \makecell{NLD[20]\\LS[21]} & \parbox[c][13ex]{3.8cm}{利用局部信息； 可以处理一些低纹理场景} & \parbox[c][13ex]{3.8cm}{要求线段共面； 丢失全局和语义信息} & 地图配准 \\ \hline
+      Learning-based & \makecell{DLD[22]\\WLD[23]} & \parbox[c][13ex]{3.8cm}{端到端方法； 可以通过设计融合局部和全局信息} & \parbox[c][13ex]{3.8cm}{缺乏通用训练集和表示方法，且泛化性有待考证； GPU计算} & 场景解析和抽象 \\ \hline
+  \end{tabular}
+  \caption{线段描述子提取方法总结}
+  \label{tab_LineDes}
+\end{table}
+
+\section{点线VIO框架}
+
+
 
 \section{各章节概述}
 \label{outline}
