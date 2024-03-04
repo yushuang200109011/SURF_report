@@ -6,7 +6,7 @@
 
   视觉定位是无人系统中最基础也最重要的问题之一，视觉惯性里程计（Visual-Inertial Odometry，VIO）是无人机、机器人等无人设备中应用广泛的视觉定位系统。传统的VIO系统主要基于点特征，通过提取和匹配图像中的角点或特征点来估计相机的位姿和轨迹。然而，点特征在低纹理场景下存在局限，将导致VIO系统的性能下降。线特征的加入可以进一步利用图像中的存在的边缘信息，使VIO系统在更广泛的环境中具有更好的性能。但是，线特征存在参数化复杂且耗时的问题，将导致VIO系统在嵌入式设备上难以达到实时性需求。
 
-  为了构建一个可以在嵌入式小型无人设备上实时运行的点线VIO系统，本课题首先基于神经网络的特征推理网络，提出了点线融合的SP-SOLD2网络，并利用自监督训练使得该网络可以通过一次推理得到特征点、特征线以及同时适用于点线匹配的描述子；为了将各类点线提取和匹配方法灵活应用于VIO任务中，本工作构建了一个前端方法可自定义的NN-PL-VIO框架，并利用SP-SOLD2点线联合网络以及一系列速度优化方法，得到了一个可以在嵌入式设备Orin NX上实时运行的点线联合VIO系统。
+  为了构建一个可以在嵌入式小型无人设备上实时运行的点线VIO系统，本课题首先基于神经网络的特征推理网络，提出了点线融合的SP-SOLD2网络，并利用自监督训练使得该网络可以通过一次推理得到特征点、特征线以及同时适用于点线匹配的描述子；为了将各类点线提取和匹配方法灵活应用于VIO任务中，本工作构建了一个前端方法可自定义的NN-PL-VIO框架，并利用SP-SOLD2点线联合网络以及一系列速度优化方法，得到了一个可以在嵌入式设备Nvidia Orin NX上实时运行的点线联合VIO系统。
 
   % 关键词用“英文逗号”分隔，输出时会自动处理为正确的分隔符
   \thusetup{
@@ -16,14 +16,12 @@
 
 \begin{abstract*}
 
-  Quadrotors are agile and can fly at high speed in complex environments. They have been widely used in rescue, logistics, agriculture and military fields, and have high research value and application value. However, theur autonomous flight is still a challenging task due to the nonlinearity of dynamics and the complexity of the environments. So far, only well-trained human pilots can exert their extreme performance.
+  Visual positioning is one of the most basic and important issues in unmanned systems. Visual inertial odometry is a widely used visual positioning system in unmanned equipment such as drones and robots. Traditional VIO systems are mainly based on point features, estimating the camera's pose and trajectory by extracting and matching corner points or feature points in the image. However, point features have limitations in low-texture scenes, which will lead to performance degradation of the VIO system. The addition of line features can further utilize the edge information existing in the image, allowing the VIO system to have better performance in a wider range of environments. However, line features have complex parameterization and time-consuming problems, which will make it difficult for the VIO system to meet real-time requirements on embedded devices.
 
-  There are two main types of existing drone autonomous flight methods. The optimization-based method has advantages of strong interpretability, stable flight, and high planning reliability, but it also faces the problem of slow mapping and planning onboard. Another type of algorithm based on deep learning attempts to establish an end-to-end planning controller. Although it solves the problem of slow calculation speed, it still has the problem of relying on a large number of manually collected expert data and labels. Some methods are insufficient generalization and are difficult to adapt to autonomous navigation tasks under different speeds and scenarios.
-
-  This study is oriented towards the autonomous navigation task of quadrotors, and proposes an end-to-end autonomous navigation algorithm framework based on reinforcement learning. Using deep reinforcement learning to fit highly dynamic and nonlinear capabilities, an autonomous navigation algorithm with better performance is obtained. This study also proposes a three-stage training method, which improves the convergence efficiency of the algorithm by an order of magnitude. This research also improves the existing simulator according to the algorithm requirements, so that it can increase the simulation speed by 2$\sim$6 times. Finally, this study also developed a deployment platform with a common interface. In the capability test, this deployment platform also achieved better capabilities than similar platforms. In this study, the trained algorithm was tested on the flight platform, which can effectively complete the navigation task and has the ability of application and deployment.
+  In order to build a point-line VIO system that can run in real time on embedded small unmanned devices, this topic first proposes a point-line fusion SP-SOLD2 network based on the feature inference network of neural networks, and uses self-supervised training to make the network Feature points, feature lines, and descriptors suitable for point-line matching can be obtained through one-time reasoning; in order to flexibly apply various point-line extraction and matching methods to VIO tasks, this work builds a NN with customizable front-end methods. -PL-VIO framework, and using the SP-SOLD2 point-line joint network and a series of speed optimization methods, a point-line joint VIO system that can run in real time on the embedded device Nvidia Orin NX is obtained.
 
   % Use comma as separator when inputting
   \thusetup{
-    keywords* = {Autonomous vehicle navigation, Motion and path planning, Reinforcement learning},
+    keywords* = {Computer Vision, Point-Line Feature, Visual-Inertial Odometry},
   }
 \end{abstract*}

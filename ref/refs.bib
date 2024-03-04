@@ -1,383 +1,228 @@
-@article{verbeke2018experimental,
-  title={Experimental maneuverability and agility quantification for rotary unmanned aerial vehicle},
-  author={Verbeke, Jon and Schutter, Joris De},
-  journal={International Journal of Micro Air Vehicles},
-  volume={10},
+@inproceedings{pumarola2017pl,
+  title={PL-SLAM: Real-time monocular visual SLAM with points and lines},
+  author={Pumarola, Albert and Vakhitov, Alexander and Agudo, Antonio and Sanfeliu, Alberto and Moreno-Noguer, Francese},
+  booktitle={2017 IEEE international conference on robotics and automation (ICRA)},
+  pages={4503--4508},
+  year={2017},
+  organization={IEEE}
+}
+
+@article{fu2020pl,
+  title={PL-VINS: Real-time monocular visual-inertial SLAM with point and line features},
+  author={Fu, Qiang and Wang, Jialong and Yu, Hongshan and Ali, Islam and Guo, Feng and He, Yijia and Zhang, Hong},
+  journal={arXiv preprint arXiv:2009.07462},
+  year={2020}
+}
+
+@inproceedings{luo2020aslfeat,
+  title={Aslfeat: Learning local features of accurate shape and localization},
+  author={Luo, Zixin and Zhou, Lei and Bai, Xuyang and Chen, Hongkai and Zhang, Jiahui and Yao, Yao and Li, Shiwei and Fang, Tian and Quan, Long},
+  booktitle={Proceedings of the IEEE/CVF conference on computer vision and pattern recognition},
+  pages={6589--6598},
+  year={2020}
+}
+
+@inproceedings{detone2018superpoint,
+  title={Superpoint: Self-supervised interest point detection and description},
+  author={DeTone, Daniel and Malisiewicz, Tomasz and Rabinovich, Andrew},
+  booktitle={Proceedings of the IEEE conference on computer vision and pattern recognition workshops},
+  pages={224--236},
+  year={2018}
+}
+
+@article{revaud2019r2d2,
+  title={R2D2: repeatable and reliable detector and descriptor},
+  author={Revaud, Jerome and Weinzaepfel, Philippe and De Souza, C{\'e}sar and Pion, Noe and Csurka, Gabriela and Cabon, Yohann and Humenberger, Martin},
+  journal={arXiv preprint arXiv:1906.06195},
+  year={2019}
+}
+
+@inproceedings{sun2021loftr,
+  title={LoFTR: Detector-free local feature matching with transformers},
+  author={Sun, Jiaming and Shen, Zehong and Wang, Yuang and Bao, Hujun and Zhou, Xiaowei},
+  booktitle={Proceedings of the IEEE/CVF conference on computer vision and pattern recognition},
+  pages={8922--8931},
+  year={2021}
+}
+
+@inproceedings{zhou2021patch2pix,
+  title={Patch2pix: Epipolar-guided pixel-level correspondences},
+  author={Zhou, Qunjie and Sattler, Torsten and Leal-Taixe, Laura},
+  booktitle={Proceedings of the IEEE/CVF conference on computer vision and pattern recognition},
+  pages={4669--4678},
+  year={2021}
+}
+
+@inproceedings{sarlin2020superglue,
+  title={Superglue: Learning feature matching with graph neural networks},
+  author={Sarlin, Paul-Edouard and DeTone, Daniel and Malisiewicz, Tomasz and Rabinovich, Andrew},
+  booktitle={Proceedings of the IEEE/CVF conference on computer vision and pattern recognition},
+  pages={4938--4947},
+  year={2020}
+}
+
+@article{von2008lsd,
+  title={LSD: A fast line segment detector with a false detection control},
+  author={Von Gioi, Rafael Grompone and Jakubowicz, Jeremie and Morel, Jean-Michel and Randall, Gregory},
+  journal={IEEE transactions on pattern analysis and machine intelligence},
+  volume={32},
+  number={4},
+  pages={722--732},
+  year={2008},
+  publisher={IEEE}
+}
+
+@article{akinlar2011edlines,
+  title={EDLines: A real-time line segment detector with a false detection control},
+  author={Akinlar, Cuneyt and Topal, Cihan},
+  journal={Pattern Recognition Letters},
+  volume={32},
+  number={13},
+  pages={1633--1642},
+  year={2011},
+  publisher={Elsevier}
+}
+
+@inproceedings{gu2022towards,
+  title={Towards light-weight and real-time line segment detection},
+  author={Gu, Geonmo and Ko, Byungsoo and Go, SeoungHyun and Lee, Sung-Hyun and Lee, Jingeun and Shin, Minchul},
+  booktitle={Proceedings of the AAAI Conference on Artificial Intelligence},
+  volume={36},
   number={1},
-  pages={3--11},
-  year={2018},
-  publisher={SAGE Publications Sage UK: London, England}
-}
-
-@article{ackermann2020ai,
-  title={Ai-powered drone learns extreme acrobatics},
-  author={Ackermann, Evan},
-  journal={IEEE Spectrum},
-  year={2020}
-}
-
-@online{darpa2023,
-  title = {darpa},
-  year = {2023},
-  date = {2023-06-23},
-  url = {https://www.darpa.mil/},
-}
-
-@article{silver2016mastering,
-  title={Mastering the game of Go with deep neural networks and tree search},
-  author={Silver, David and Huang, Aja and Maddison, Chris J and Guez, Arthur and Sifre, Laurent and Van Den Driessche, George and Schrittwieser, Julian and Antonoglou, Ioannis and Panneershelvam, Veda and Lanctot, Marc and others},
-  journal={nature},
-  volume={529},
-  number={7587},
-  pages={484--489},
-  year={2016},
-  publisher={Nature Publishing Group}
-}
-
-@article{silver2017mastering,
-  title={Mastering the game of go without human knowledge},
-  author={Silver, David and Schrittwieser, Julian and Simonyan, Karen and Antonoglou, Ioannis and Huang, Aja and Guez, Arthur and Hubert, Thomas and Baker, Lucas and Lai, Matthew and Bolton, Adrian and others},
-  journal={nature},
-  volume={550},
-  number={7676},
-  pages={354--359},
-  year={2017},
-  publisher={Nature Publishing Group}
-}
-
-@article{vinyals2019grandmaster,
-  title={Grandmaster level in StarCraft II using multi-agent reinforcement learning},
-  author={Vinyals, Oriol and Babuschkin, Igor and Czarnecki, Wojciech M and Mathieu, Micha{\"e}l and Dudzik, Andrew and Chung, Junyoung and Choi, David H and Powell, Richard and Ewalds, Timo and Georgiev, Petko and others},
-  journal={Nature},
-  volume={575},
-  number={7782},
-  pages={350--354},
-  year={2019},
-  publisher={Nature Publishing Group UK London}
-}
-
-@article{senior2020improved,
-  title={Improved protein structure prediction using potentials from deep learning},
-  author={Senior, Andrew W and Evans, Richard and Jumper, John and Kirkpatrick, James and Sifre, Laurent and Green, Tim and Qin, Chongli and {\v{Z}}{\'\i}dek, Augustin and Nelson, Alexander WR and Bridgland, Alex and others},
-  journal={Nature},
-  volume={577},
-  number={7792},
-  pages={706--710},
-  year={2020},
-  publisher={Nature Publishing Group UK London}
-}
-
-@article{fawzi2022discovering,
-  title={Discovering faster matrix multiplication algorithms with reinforcement learning},
-  author={Fawzi, Alhussein and Balog, Matej and Huang, Aja and Hubert, Thomas and Romera-Paredes, Bernardino and Barekatain, Mohammadamin and Novikov, Alexander and R Ruiz, Francisco J and Schrittwieser, Julian and Swirszcz, Grzegorz and others},
-  journal={Nature},
-  volume={610},
-  number={7930},
-  pages={47--53},
-  year={2022},
-  publisher={Nature Publishing Group}
-}
-
-@article{chiang2019learning,
-  title={Learning navigation behaviors end-to-end with autorl},
-  author={Chiang, Hao-Tien Lewis and Faust, Aleksandra and Fiser, Marek and Francis, Anthony},
-  journal={IEEE Robotics and Automation Letters},
-  volume={4},
-  number={2},
-  pages={2007--2014},
-  year={2019},
-  publisher={IEEE}
-}
-
-@article{liu2022safe,
-  title={Safe reinforcement learning of dynamic high-dimensional robotic tasks: navigation, manipulation, interaction},
-  author={Liu, Puze and Zhang, Kuo and Tateo, Davide and Jauhri, Snehal and Hu, Zhiyuan and Peters, Jan and Chalvatzaki, Georgia},
-  journal={arXiv preprint arXiv:2209.13308},
+  pages={726--734},
   year={2022}
 }
 
-@article{falanga2019fast,
-  title={How fast is too fast? the role of perception latency in high-speed sense and avoid},
-  author={Falanga, Davide and Kim, Suseong and Scaramuzza, Davide},
-  journal={IEEE Robotics and Automation Letters},
-  volume={4},
-  number={2},
-  pages={1884--1891},
+@article{li2019line,
+  title={Line-cnn: End-to-end traffic line detection with line proposal unit},
+  author={Li, Xiang and Li, Jun and Hu, Xiaolin and Yang, Jian},
+  journal={IEEE Transactions on Intelligent Transportation Systems},
+  volume={21},
+  number={1},
+  pages={248--258},
   year={2019},
   publisher={IEEE}
 }
 
-@article{heng2014autonomous,
-  title={Autonomous visual mapping and exploration with a micro aerial vehicle},
-  author={Heng, Lionel and Honegger, Dominik and Lee, Gim Hee and Meier, Lorenz and Tanskanen, Petri and Fraundorfer, Friedrich and Pollefeys, Marc},
-  journal={Journal of Field Robotics},
-  volume={31},
-  number={4},
-  pages={654--675},
+@inproceedings{pautrat2021sold2,
+  title={SOLD2: Self-supervised occlusion-aware line description and detection},
+  author={Pautrat, R{\'e}mi and Lin, Juan-Ting and Larsson, Viktor and Oswald, Martin R and Pollefeys, Marc},
+  booktitle={Proceedings of the IEEE/CVF Conference on Computer Vision and Pattern Recognition},
+  pages={11368--11378},
+  year={2021}
+}
+
+@inproceedings{pautrat2023deeplsd,
+  title={Deeplsd: Line segment detection and refinement with deep image gradients},
+  author={Pautrat, R{\'e}mi and Barath, Daniel and Larsson, Viktor and Oswald, Martin R and Pollefeys, Marc},
+  booktitle={Proceedings of the IEEE/CVF Conference on Computer Vision and Pattern Recognition},
+  pages={17327--17336},
+  year={2023}
+}
+
+@article{zhang2013efficient,
+  title={An efficient and robust line segment matching approach based on LBD descriptor and pairwise geometric consistency},
+  author={Zhang, Lilian and Koch, Reinhard},
+  journal={Journal of visual communication and image representation},
+  volume={24},
+  number={7},
+  pages={794--805},
+  year={2013},
+  publisher={Elsevier}
+}
+
+@article{wang2009msld,
+  title={MSLD: A robust descriptor for line matching},
+  author={Wang, Zhiheng and Wu, Fuchao and Hu, Zhanyi},
+  journal={Pattern Recognition},
+  volume={42},
+  number={5},
+  pages={941--953},
+  year={2009},
+  publisher={Elsevier}
+}
+
+@article{yammine2014novel,
+  title={Novel similarity-invariant line descriptor and matching algorithm for global motion estimation},
+  author={Yammine, Gilbert and Wige, Eugen and Simmet, Franz and Niederkorn, Dieter and Kaup, Andre},
+  journal={IEEE transactions on circuits and systems for video technology},
+  volume={24},
+  number={8},
+  pages={1323--1335},
   year={2014},
-  publisher={Wiley Online Library}
+  publisher={IEEE}
 }
 
-@article{saeedi20173d,
-  title={3d mapping for autonomous quadrotor aircraft},
-  author={Saeedi, Sajad and Thibault, Carl and Trentini, Michael and Li, Howard},
-  journal={Unmanned Systems},
-  volume={5},
-  number={03},
-  pages={181--196},
-  year={2017},
-  publisher={World Scientific}
+@inproceedings{kim2010wide,
+  title={Wide-baseline image matching based on coplanar line intersections},
+  author={Kim, Hyunwoo and Lee, Sukhan},
+  booktitle={2010 IEEE/RSJ International Conference on Intelligent Robots and Systems},
+  pages={1157--1164},
+  year={2010},
+  organization={IEEE}
 }
 
-@article{faessler2016autonomous,
-  title={Autonomous, vision-based flight and live dense 3D mapping with a quadrotor micro aerial vehicle},
-  author={Faessler, Matthias and Fontana, Flavio and Forster, Christian and Mueggler, Elias and Pizzoli, Matia and Scaramuzza, Davide},
-  journal={Journal of Field Robotics},
-  volume={33},
+@inproceedings{lange2019dld,
+  title={Dld: A deep learning based line descriptor for line feature matching},
+  author={Lange, Manuel and Schweinfurth, Fabian and Schilling, Andreas},
+  booktitle={2019 IEEE/RSJ International Conference on Intelligent Robots and Systems (IROS)},
+  pages={5910--5915},
+  year={2019},
+  organization={IEEE}
+}
+
+@article{lange2020wld,
+  title={Wld: A wavelet and learning based line descriptor for line feature matching},
+  author={Lange, Manuel and Raisch, Claudio and Schilling, Andreas},
+  year={2020},
+  publisher={The Eurographics Association}
+}
+
+@article{he2018pl,
+  title={PL-VIO: Tightly-coupled monocular visual--inertial odometry using point and line features},
+  author={He, Yijia and Zhao, Ji and Guo, Yue and He, Wenhao and Yuan, Kui},
+  journal={Sensors},
+  volume={18},
   number={4},
-  pages={431--450},
-  year={2016},
-  publisher={Wiley Online Library}
+  pages={1159},
+  year={2018},
+  publisher={MDPI}
 }
 
-@inproceedings{allen2016real,
-  title={A real-time framework for kinodynamic planning with application to quadrotor obstacle avoidance},
-  author={Allen, Ross and Pavone, Marco},
-  booktitle={AIAA Guidance, Navigation, and Control Conference},
-  pages={1374},
-  year={2016}
-}
-
-@article{liu2018search,
-  title={Search-based motion planning for aggressive flight in se (3)},
-  author={Liu, Sikang and Mohta, Kartik and Atanasov, Nikolay and Kumar, Vijay},
-  journal={IEEE Robotics and Automation Letters},
-  volume={3},
-  number={3},
-  pages={2439--2446},
+@article{qin2018vins,
+  title={Vins-mono: A robust and versatile monocular visual-inertial state estimator},
+  author={Qin, Tong and Li, Peiliang and Shen, Shaojie},
+  journal={IEEE Transactions on Robotics},
+  volume={34},
+  number={4},
+  pages={1004--1020},
   year={2018},
   publisher={IEEE}
 }
 
-@inproceedings{oleynikova2017voxblox,
-  title={Voxblox: Incremental 3d euclidean signed distance fields for on-board mav planning},
-  author={Oleynikova, Helen and Taylor, Zachary and Fehr, Marius and Siegwart, Roland and Nieto, Juan},
-  booktitle={2017 IEEE/RSJ International Conference on Intelligent Robots and Systems (IROS)},
-  pages={1366--1373},
-  year={2017},
-  organization={IEEE}
-}
-
-@inproceedings{tordesillas2019faster,
-  title={Faster: Fast and safe trajectory planner for flights in unknown environments},
-  author={Tordesillas, Jesus and Lopez, Brett T and How, Jonathan P},
-  booktitle={2019 IEEE/RSJ international conference on intelligent robots and systems (IROS)},
-  pages={1934--1940},
-  year={2019},
-  organization={IEEE}
-}
-
-@article{zhou2020ego,
-  title={Ego-planner: An esdf-free gradient-based local planner for quadrotors},
-  author={Zhou, Xin and Wang, Zhepei and Ye, Hongkai and Xu, Chao and Gao, Fei},
-  journal={IEEE Robotics and Automation Letters},
-  volume={6},
-  number={2},
-  pages={478--485},
-  year={2020},
-  publisher={IEEE}
-}
-
-@inproceedings{zhou2021ego,
-  title={Ego-swarm: A fully autonomous and decentralized quadrotor swarm system in cluttered environments},
-  author={Zhou, Xin and Zhu, Jiangchao and Zhou, Hongyu and Xu, Chao and Gao, Fei},
-  booktitle={2021 IEEE international conference on robotics and automation (ICRA)},
-  pages={4101--4107},
-  year={2021},
-  organization={IEEE}
-}
-
-@article{sadeghi2016cad2rl,
-  title={Cad2rl: Real single-image flight without a single real image},
-  author={Sadeghi, Fereshteh and Levine, Sergey},
-  journal={arXiv preprint arXiv:1611.04201},
-  year={2016}
-}
-
-@inproceedings{gandhi2017learning,
-  title={Learning to fly by crashing},
-  author={Gandhi, Dhiraj and Pinto, Lerrel and Gupta, Abhinav},
-  booktitle={2017 IEEE/RSJ International Conference on Intelligent Robots and Systems (IROS)},
-  pages={3948--3955},
-  year={2017},
-  organization={IEEE}
-}
-
-@article{loquercio2021learning,
-  title={Learning high-speed flight in the wild},
-  author={Loquercio, Antonio and Kaufmann, Elia and Ranftl, Ren{\'e} and M{\"u}ller, Matthias and Koltun, Vladlen and Scaramuzza, Davide},
-  journal={Science Robotics},
-  volume={6},
-  number={59},
-  pages={eabg5810},
-  year={2021},
-  publisher={American Association for the Advancement of Science}
-}
-
-@article{kaufmann2020deep,
-  title={Deep drone acrobatics},
-  author={Kaufmann, Elia and Loquercio, Antonio and Ranftl, Ren{\'e} and M{\"u}ller, Matthias and Koltun, Vladlen and Scaramuzza, Davide},
-  journal={arXiv preprint arXiv:2006.05768},
-  year={2020}
-}
-
-@online{airsim2017,
-  title = {Airsim},
-  year = {2017},
-  date = {2023-06-23},
-  url = {https://microsoft.github.io/AirSim},
-}
-
-@inproceedings{flightmare,
-    title={Flightmare: A Flexible Quadrotor Simulator},
-    author={Song, Yunlong and Naji, Selim and Kaufmann, Elia and Loquercio, Antonio and Scaramuzza, Davide},
-    booktitle={Conference on Robot Learning},
-    year={2020}
-}
-
-@online{pybullet,
-  title = {Gym-Pybullet-Drones},
-  year = {2017},
-  date = {2023-06-23},
-  url = {https://github.com/utiasDSL/gym-pybullet-drones},
-}
-
-@online{crazyfly,
-  title = {Crazyflie},
-  year = {2017},
-  date = {2023-06-23},
-  url = {https://www.bitcraze.io/products/crazyflie-2-1/},
-}
-
-@online{amove,
-  title = {AMoveLab},
-  year = {2017},
-  date = {2023-06-23},
-  url = {https://www.amovlab.com/},
-}
-
-@article{zhu2022viola,
-  title={VIOLA: Imitation Learning for Vision-Based Manipulation with Object Proposal Priors},
-  author={Zhu, Yifeng and Joshi, Abhishek and Stone, Peter and Zhu, Yuke},
-  journal={arXiv preprint arXiv:2210.11339},
-  year={2022}
-}
-
-@inproceedings{ren2022bubble,
-  title={Bubble planner: Planning high-speed smooth quadrotor trajectories using receding corridors},
-  author={Ren, Yunfan and Zhu, Fangcheng and Liu, Wenyi and Wang, Zhepei and Lin, Yi and Gao, Fei and Zhang, Fu},
-  booktitle={2022 IEEE/RSJ International Conference on Intelligent Robots and Systems (IROS)},
-  pages={6332--6339},
-  year={2022},
-  organization={IEEE}
-}
-
-@online{unity,
-  title = {Unity},
-  year = {2017},
-  date = {2023-06-23},
-  url = {https://unity.com/},
-}
-
-@inproceedings{kaufmann2022benchmark,
-  title={A benchmark comparison of learned control policies for agile quadrotor flight},
-  author={Kaufmann, Elia and Bauersfeld, Leonard and Scaramuzza, Davide},
-  booktitle={2022 International Conference on Robotics and Automation (ICRA)},
-  pages={10504--10510},
-  year={2022},
-  organization={IEEE}
-}
-
-@InProceedings{Howard_2019_ICCV,
-author = {Howard, Andrew and Sandler, Mark and Chu, Grace and Chen, Liang-Chieh and Chen, Bo and Tan, Mingxing and Wang, Weijun and Zhu, Yukun and Pang, Ruoming and Vasudevan, Vijay and Le, Quoc V. and Adam, Hartwig},
-title = {Searching for MobileNetV3},
-booktitle = {Proceedings of the IEEE/CVF International Conference on Computer Vision (ICCV)},
-month = {October},
-year = {2019}
-}
-
-@article{zhou2019robust,
-  title={Robust and efficient quadrotor trajectory generation for fast autonomous flight},
-  author={Zhou, Boyu and Gao, Fei and Wang, Luqi and Liu, Chuhao and Shen, Shaojie},
-  journal={IEEE Robotics and Automation Letters},
-  volume={4},
-  number={4},
-  pages={3529--3536},
-  year={2019},
-  publisher={IEEE}
-}
-
-@inproceedings{florence2020integrated,
-  title={Integrated perception and control at high speed: Evaluating collision avoidance maneuvers without maps},
-  author={Florence, Pete and Carter, John and Tedrake, Russ},
-  booktitle={Algorithmic Foundations of Robotics XII: Proceedings of the Twelfth Workshop on the Algorithmic Foundations of Robotics},
-  pages={304--319},
-  year={2020},
-  organization={Springer}
-}
-
-@Article{Faessler18ral,
-  author        = {Matthias Faessler and Antonio Franchi and Davide Scaramuzza},
-  title         = {Differential Flatness of Quadrotor Dynamics Subject to Rotor
-                  Drag for Accurate Tracking of High-Speed Trajectories},
-  journal       = {{IEEE} Robot. Autom. Lett.},
-  year          = 2018,
-  volume        = 3,
-  number        = 2,
-  pages         = {620--626},
-  month         = apr,
-  doi           = {10.1109/LRA.2017.2776353},
-  issn          = {2377-3766}
-}
-
-@article{schulman2017proximal,
-  title={Proximal policy optimization algorithms},
-  author={Schulman, John and Wolski, Filip and Dhariwal, Prafulla and Radford, Alec and Klimov, Oleg},
-  journal={arXiv preprint arXiv:1707.06347},
+@inproceedings{balntas2017hpatches,
+  title={HPatches: A benchmark and evaluation of handcrafted and learned local descriptors},
+  author={Balntas, Vassileios and Lenc, Karel and Vedaldi, Andrea and Mikolajczyk, Krystian},
+  booktitle={Proceedings of the IEEE conference on computer vision and pattern recognition},
+  pages={5173--5182},
   year={2017}
 }
 
-@article{kalman1960contributions,
-  title={Contributions to the theory of optimal control},
-  author={Kalman, Rudolf Emil and others},
-  journal={Bol. soc. mat. mexicana},
-  volume={5},
-  number={2},
-  pages={102--119},
-  year={1960}
+@inproceedings{huang2018learning,
+  title={Learning to parse wireframes in images of man-made environments},
+  author={Huang, Kun and Wang, Yifan and Zhou, Zihan and Ding, Tianjiao and Gao, Shenghua and Ma, Yi},
+  booktitle={Proceedings of the IEEE Conference on Computer Vision and Pattern Recognition},
+  pages={626--635},
+  year={2018}
 }
 
-@article{kalman1960new,
-  title={A new approach to linear filtering and prediction problems},
-  author={Kalman, Rudolph Emil},
-  year={1960}
-}
-@article{kalman1961new,
-  title={New results in linear filtering and prediction theory},
-  author={Kalman, Rudolph E and Bucy, Richard S},
-  year={1961}
-}
-
-@InProceedings{Falanga2018,
-  author = {Falanga, Davide and Foehn, Philipp and Lu, Peng and Scaramuzza, Davide},
-  title = {{PAMPC}: Perception-Aware Model Predictive Control for Quadrotors},
-  booktitle = {IEEE/RSJ Int. Conf. Intell. Robot. Syst. (IROS)},
-  year = {2018}
-}
-
-@online{mavros2023,
-  title = {MavROS},
-  year = {2023},
-  date = {2023-06-23},
-  url = {https://github.com/mavlink/mavros},
+@article{burri2016euroc,
+  title={The EuRoC micro aerial vehicle datasets},
+  author={Burri, Michael and Nikolic, Janosch and Gohl, Pascal and Schneider, Thomas and Rehder, Joern and Omari, Sammy and Achtelik, Markus W and Siegwart, Roland},
+  journal={The International Journal of Robotics Research},
+  volume={35},
+  number={10},
+  pages={1157--1163},
+  year={2016},
+  publisher={SAGE Publications Sage UK: London, England}
 }
